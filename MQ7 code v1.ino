@@ -1,32 +1,36 @@
 /*
- * MQ-7 Carbon Monoxide Sensor PPM Reading Sketch
+ * ESP32 MQ-7 Carbon Monoxide Sensor PPM Reading Sketch
  *
- * This sketch reads the analog output from an MQ-7 CO sensor,
- * calibrates it, and converts the reading to Parts Per Million (PPM).
+ * This sketch is adapted for an ESP32 board. It reads the analog output
+ * from an MQ-7 CO sensor, calibrates it, and converts the reading to PPM.
+ *
+ * --- IMPORTANT HARDWARE REQUIREMENT ---
+ * The ESP32's analog pins operate at 3.3V, while the MQ-7 sensor outputs a 5V signal.
+ * You MUST use a voltage divider to step down the sensor's output before
+ * connecting it to an ESP32 analog pin to avoid damaging the board.
+ *
+ * Voltage Divider Circuit:
+ * MQ-7 AOUT ---[ R1 (10kΩ) ]---+--- ESP32 Analog Pin (e.g., GPIO 34)
+ * |
+ * [ R2 (20kΩ) ]
+ * |
+ * GND
  *
  * Connections:
- * - MQ-7 AOUT pin -> Arduino A0 pin
- * - MQ-7 VCC pin -> Arduino 5V pin
- * - MQ-7 GND pin -> Arduino GND pin
- *
- * How it works:
- * 1. Calibration: The sensor first needs to be calibrated to find its
- * resistance in clean air (R0). This sketch does a quick calibration
- * in the setup() function. For best results, let the sensor warm up
- * for several minutes before running the calibration. The datasheet
- * recommends a 48-hour preheating period for maximum stability.
- *
- * 2. PPM Conversion: The sensor's resistance (Rs) changes in the presence
- * of CO. The ratio of Rs to R0 (Rs/R0) is used to calculate the PPM
- * concentration based on a formula derived from the sensor's datasheet graph.
- *
- * IMPORTANT: This sensor is for educational and hobbyist purposes.
- * For any application where CO poses a health risk, use a certified and
- * professionally calibrated CO detector.
+ * - MQ-7 AOUT pin -> Voltage Divider circuit above
+ * - ESP32 Analog Pin (e.g., GPIO 34) -> Junction of R1 and R2
+ * - MQ-7 VCC pin -> 5V pin (from ESP32 board or external supply)
+ * - MQ-7 GND pin -> ESP32 GND pin
  */
 
 // --- Constants and Pin Definitions ---
-const int SENSOR_ANALOG_PIN = A0; // Analog pin connected to the MQ-7's AOUT
+// Use an ADC1 pin (GPIOs 32-39 are good choices)
+const int SENSOR_ANALOG_PIN = 34;
+
+// --- Voltage Divider Resistor Values (in Ohms) ---
+// These must match the resistors you use in your hardware setup.
+const float R1_VALUE = 10000.0;
+const float R2_VALUE = 20000.0;
 
 // --- Calibration and Sensor Characteristics ---
 // The value of the load resistor (RL) on the module in Ohms.
@@ -42,10 +46,10 @@ float R0 = 0;
 void setup() {
   // Initialize serial communication for debugging and output.
   Serial.begin(9600);
-  while (!Serial); // Wait for serial port to connect. Needed for native USB port only
+  while (!Serial); // Wait for serial port to connect.
 
-  Serial.println("MQ-7 Sensor Sketch - CO in PPM");
-  Serial.println("--------------------------------");
+  Serial.println("ESP32 MQ-7 Sensor Sketch - CO in PPM");
+  Serial.println("------------------------------------");
   Serial.println("Warming up the sensor...");
 
   // Allow the sensor to preheat for a moment before calibration.
@@ -82,7 +86,7 @@ void calibrateSensor() {
   float sensor_voltage_sum = 0;
   // Take multiple readings to get a stable average.
   for (int i = 0; i < 100; i++) {
-    sensor_voltage_sum += readSensorVoltage();
+    sensor_voltage_sum += readOriginalSensorVoltage();
     delay(50);
   }
   float avg_sensor_voltage = sensor_voltage_sum / 100.0;
@@ -98,7 +102,7 @@ void calibrateSensor() {
   Serial.println("Calibration complete.");
   Serial.print("Calculated R0: ");
   Serial.println(R0);
-  Serial.println("--------------------------------");
+  Serial.println("------------------------------------");
 }
 
 /**
@@ -114,22 +118,24 @@ float getPPM() {
 
   // The datasheet for the MQ-7 shows a log-log graph of (Rs/R0) vs PPM.
   // We can approximate the CO curve with a power function: PPM = A * (Rs/R0)^B
-  // From the graph, we can find two points and solve for A and B.
   // For CO, a common approximation is: PPM = 100 * (Rs/R0)^-1.5
-  // Note: These values might need tweaking for your specific sensor.
   float ppm = 100 * pow(ratio, -1.5);
 
   return ppm;
 }
 
 /**
- * @brief Reads the raw analog value and converts it to voltage.
- * @return The sensor's output voltage.
+ * @brief Reads the voltage at the ESP32 pin and calculates the original sensor voltage.
+ * @return The sensor's actual output voltage (before the voltage divider).
  */
-float readSensorVoltage() {
+float readOriginalSensorVoltage() {
   int sensorValue = analogRead(SENSOR_ANALOG_PIN);
-  // Convert the analog value (0-1023) to a voltage (0-5V).
-  return (sensorValue / 1023.0) * 5.0;
+  // ESP32 ADC is 12-bit (0-4095) and reference voltage is 3.3V.
+  float v_out_divided = (sensorValue / 4095.0) * 3.3;
+
+  // Reverse the voltage divider formula to find the original sensor voltage.
+  // V_sensor = V_out_divided * (R1 + R2) / R2
+  return v_out_divided * (R1_VALUE + R2_VALUE) / R2_VALUE;
 }
 
 /**
@@ -137,8 +143,8 @@ float readSensorVoltage() {
  * @return The calculated resistance in Ohms.
  */
 float readSensorResistance() {
-  float sensor_volt = readSensorVoltage();
-  // Use the voltage divider formula to calculate Rs.
+  float sensor_volt = readOriginalSensorVoltage();
+  // Use the voltage divider formula to calculate Rs from the original sensor voltage.
   // Rs = (Vc * RL / Vout) - RL
   // Vc = 5V
   float rs_gas = (5.0 * LOAD_RESISTOR_VALUE / sensor_volt) - LOAD_RESISTOR_VALUE;
