@@ -82,7 +82,7 @@ void calibrateSensor() {
   float sensor_voltage_sum = 0;
   // Take multiple readings to get a stable average.
   for (int i = 0; i < 100; i++) {
-    sensor_voltage_sum += readSensorVoltage();ure (Heated by 1.5V): In this phase, the sensor's conductivity increases in the presence of CO. This c
+    sensor_voltage_sum += readSensorVoltage();
     delay(50);
   }
   float avg_sensor_voltage = sensor_voltage_sum / 100.0;
