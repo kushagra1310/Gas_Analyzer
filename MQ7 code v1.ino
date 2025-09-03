@@ -1,142 +1,161 @@
 /*
- * ESP32 MQ-7 Carbon Monoxide Sensor PPM Reading Sketch
+ * ESP32 MQ-7 Carbon Monoxide Sensor - Full Working Sketch
  *
- * This sketch is adapted for an ESP32 board. It reads the analog output
- * from an MQ-7 CO sensor, calibrates it, and converts the reading to PPM.
+ * This sketch correctly implements the dual-heat cycle required for the MQ-7 sensor.
  *
- * --- IMPORTANT HARDWARE REQUIREMENT ---
- * The ESP32's analog pins operate at 3.3V, while the MQ-7 sensor outputs a 5V signal.
- * You MUST use a voltage divider to step down the sensor's output before
- * connecting it to an ESP32 analog pin to avoid damaging the board.
+ * --- HARDWARE REQUIREMENTS ---
+ * 1.  A voltage divider is REQUIRED on the AOUT pin (see original sketch).
+ * 2.  A MOSFET or BJT transistor is REQUIRED to control the heater element.
+ * The ESP32's GPIO pin cannot power the heater directly.
  *
- * Voltage Divider Circuit:
- * MQ-7 AOUT ---[ R1 (10kΩ) ]---+--- ESP32 Analog Pin (e.g., GPIO 34)
- * |
- * [ R2 (20kΩ) ]
- * |
- * GND
- *
- * Connections:
- * - MQ-7 AOUT pin -> Voltage Divider circuit above
- * - ESP32 Analog Pin (e.g., GPIO 34) -> Junction of R1 and R2
- * - MQ-7 VCC pin -> 5V pin (from ESP32 board or external supply)
- * - MQ-7 GND pin -> ESP32 GND pin
+ * --- CONNECTIONS ---
+ * - MQ-7 AOUT -> Voltage Divider -> SENSOR_ANALOG_PIN (e.g., 34)
+ * - MQ-7 VCC -> 5V
+ * - MQ-7 GND -> GND
+ * - MOSFET Gate -> HEATER_CONTROL_PIN (e.g., 23)
+ * - MOSFET Drain -> One of the MQ-7 'H' pins
+ * - MOSFET Source -> GND
+ * - The other MQ-7 'H' pin -> 5V
  */
 
-// --- Constants and Pin Definitions ---
-// Use an ADC1 pin (GPIOs 32-39 are good choices)
-const int SENSOR_ANALOG_PIN = 34;
+// --- Pin Definitions ---
+const int SENSOR_ANALOG_PIN = 34;    // ADC1 pin for sensor reading
+const int HEATER_CONTROL_PIN = 23;   // GPIO to control the MOSFET gate
 
 // --- Voltage Divider Resistor Values (in Ohms) ---
-// These must match the resistors you use in your hardware setup.
 const float R1_VALUE = 10000.0;
 const float R2_VALUE = 20000.0;
 
-// --- Calibration and Sensor Characteristics ---
-// The value of the load resistor (RL) on the module in Ohms.
-// This is typically 10kΩ (10000 Ohms) for most MQ-7 modules.
-const float LOAD_RESISTOR_VALUE = 10000.0;
+// --- Sensor Characteristics ---
+const float LOAD_RESISTOR_VALUE = 10000.0; // Value of the load resistor on the module
+float R0 = 10.0; // Sensor resistance in clean air. Will be calculated in setup().
 
-// R0 is the sensor's resistance in clean air. This value will be
-// determined automatically during the calibration phase.
-float R0 = 0;
+// --- Heating Cycle Timing (in milliseconds) ---
+const unsigned long HIGH_HEAT_DURATION = 60000; // 60 seconds for cleaning
+const unsigned long LOW_HEAT_DURATION = 90000;  // 90 seconds for sensing
+unsigned long cycleStartTime = 0;
 
-// --- Main Sketch ---
+// --- State Machine for Heating Cycle ---
+enum SensorState { STATE_HIGH_HEAT, STATE_LOW_HEAT };
+SensorState currentState = STATE_HIGH_HEAT;
+
+// --- ESP32 PWM (LEDC) Configuration for 1.4V ---
+const int PWM_CHANNEL = 0;
+const int PWM_FREQ = 5000;
+const int PWM_RESOLUTION = 8;
+// Calculate PWM duty cycle for 1.4V: (1.4V / 5.0V) * 255 = 71.4
+const int LOW_HEAT_PWM_VALUE = 71;
+
 
 void setup() {
-  // Initialize serial communication for debugging and output.
   Serial.begin(9600);
-  while (!Serial); // Wait for serial port to connect.
+  while (!Serial);
 
-  Serial.println("ESP32 MQ-7 Sensor Sketch - CO in PPM");
+  // Configure heater control pin as output
+  pinMode(HEATER_CONTROL_PIN, OUTPUT);
+
+  // Configure ESP32 LEDC (PWM) for low heat phase
+  ledcSetup(PWM_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
+  ledcAttachPin(HEATER_CONTROL_PIN, PWM_CHANNEL);
+
+  Serial.println("ESP32 MQ-7 Sensor Sketch");
   Serial.println("------------------------------------");
-  Serial.println("Warming up the sensor...");
 
-  // Allow the sensor to preheat for a moment before calibration.
-  // A longer warmup period will result in more accurate readings.
-  delay(20000); // 20-second warmup
+  // --- Sensor Preheat Phase ---
+  Serial.println("Sensor is preheating for 3 minutes...");
+  Serial.println("This allows the sensor to stabilize before calibration.");
+  digitalWrite(HEATER_CONTROL_PIN, HIGH); // Full 5V heat
+  delay(180000); // 3-minute preheat. For best results, this could be longer.
 
+  // --- Calibration Phase ---
   calibrateSensor();
+
+  // --- Start the Main Cycle ---
+  Serial.println("\nStarting main measurement cycle...");
+  cycleStartTime = millis();
+  // Start the first cycle in HIGH heat mode
+  ledcWrite(PWM_CHANNEL, 255); // Full 5V on heater
+  currentState = STATE_HIGH_HEAT;
+  Serial.println("--> Switched to HIGH heat phase (60s cleaning).");
 }
+
 
 void loop() {
-  // Read the current CO concentration in PPM.
-  float ppm = getPPM();
+  unsigned long currentTime = millis();
 
-  // Print the result to the Serial Monitor.
-  Serial.print("CO Concentration: ");
-  Serial.print(ppm);
-  Serial.println(" PPM");
+  // --- State Machine Logic ---
+  if (currentState == STATE_HIGH_HEAT && (currentTime - cycleStartTime >= HIGH_HEAT_DURATION)) {
+    // High heat phase is over, switch to low heat
+    currentState = STATE_LOW_HEAT;
+    cycleStartTime = currentTime; // Reset timer for the new phase
+    ledcWrite(PWM_CHANNEL, LOW_HEAT_PWM_VALUE); // Switch to ~1.4V
+    Serial.println("--> Switched to LOW heat phase (90s sensing).");
 
-  // Wait for a couple of seconds before the next reading.
-  delay(2000);
+  } else if (currentState == STATE_LOW_HEAT && (currentTime - cycleStartTime >= LOW_HEAT_DURATION)) {
+    // Low heat phase is over. Time to take a reading!
+    Serial.print("\n--- Reading at end of low heat cycle ---\n");
+    float ppm = getPPM();
+    Serial.print("CO Concentration: ");
+    Serial.print(ppm);
+    Serial.println(" PPM");
+    Serial.println("------------------------------------");
+
+    // Switch back to high heat for cleaning
+    currentState = STATE_HIGH_HEAT;
+    cycleStartTime = currentTime;
+    ledcWrite(PWM_CHANNEL, 255); // Back to 5V (255 is max duty cycle)
+    Serial.println("--> Switched to HIGH heat phase (60s cleaning).");
+  }
 }
 
-// --- Helper Functions ---
 
 /**
- * @brief Calibrates the sensor to find its resistance in clean air (R0).
- * This function should be run in an environment with fresh, clean air.
+ * @brief Calibrates the sensor to find R0 in clean air.
+ * This runs once at startup after preheating.
  */
 void calibrateSensor() {
-  Serial.println("Starting calibration...");
-  Serial.println("Ensure the sensor is in clean air.");
-  delay(2000); // Wait for user to read message
+  Serial.println("Starting calibration... Ensure sensor is in clean air.");
+  
+  // To calibrate, we need a reading at the end of a low-heat cycle.
+  Serial.println("Setting heater to 1.4V for 90s for calibration reading...");
+  ledcWrite(PWM_CHANNEL, LOW_HEAT_PWM_VALUE);
+  delay(LOW_HEAT_DURATION);
 
-  float sensor_voltage_sum = 0;
-  // Take multiple readings to get a stable average.
-  for (int i = 0; i < 100; i++) {
-    sensor_voltage_sum += readOriginalSensorVoltage();
-    delay(50);
+  Serial.println("Taking calibration measurement...");
+  float rs_air = 0;
+  // Take an average of 10 readings for stability
+  for(int i = 0; i < 10; i++) {
+    rs_air += readSensorResistance();
+    delay(100);
   }
-  float avg_sensor_voltage = sensor_voltage_sum / 100.0;
+  rs_air /= 10.0;
 
-  // Calculate the sensor's resistance (Rs) in clean air.
-  float rs_air = (5.0 * LOAD_RESISTOR_VALUE / avg_sensor_voltage) - LOAD_RESISTOR_VALUE;
-
-  // From the datasheet, the Rs/R0 ratio in clean air is approximately 9.8.
-  // We can use this to calculate R0.
-  // R0 = Rs_air / 9.8
+  // The Rs/R0 ratio in clean air is approximately 9.8 for the MQ-7
   R0 = rs_air / 9.8;
 
   Serial.println("Calibration complete.");
   Serial.print("Calculated R0: ");
   Serial.println(R0);
+  Serial.println("NOTE: You can hard-code this R0 value in the future to skip calibration.");
   Serial.println("------------------------------------");
 }
+
 
 /**
  * @brief Reads the sensor and calculates the CO concentration in PPM.
  * @return The calculated CO concentration in PPM.
  */
 float getPPM() {
-  // Get the current resistance of the sensor (Rs).
   float rs = readSensorResistance();
-
-  // Calculate the Rs/R0 ratio.
   float ratio = rs / R0;
 
-  // The datasheet for the MQ-7 shows a log-log graph of (Rs/R0) vs PPM.
-  // We can approximate the CO curve with a power function: PPM = A * (Rs/R0)^B
+  // Using the formula from the datasheet's log-log graph: PPM = A * (Rs/R0)^B
   // For CO, a common approximation is: PPM = 100 * (Rs/R0)^-1.5
+  if (ratio <= 0) return 0; // Avoid issues with log or pow functions
   float ppm = 100 * pow(ratio, -1.5);
-
   return ppm;
 }
 
-/**
- * @brief Reads the voltage at the ESP32 pin and calculates the original sensor voltage.
- * @return The sensor's actual output voltage (before the voltage divider).
- */
-float readOriginalSensorVoltage() {
-  int sensorValue = analogRead(SENSOR_ANALOG_PIN);
-  // ESP32 ADC is 12-bit (0-4095) and reference voltage is 3.3V.
-  float v_out_divided = (sensorValue / 4095.0) * 3.3;
-
-  // Reverse the voltage divider formula to find the original sensor voltage.
-  // V_sensor = V_out_divided * (R1 + R2) / R2
-  return v_out_divided * (R1_VALUE + R2_VALUE) / R2_VALUE;
-}
 
 /**
  * @brief Calculates the sensor's current resistance (Rs).
@@ -144,9 +163,20 @@ float readOriginalSensorVoltage() {
  */
 float readSensorResistance() {
   float sensor_volt = readOriginalSensorVoltage();
-  // Use the voltage divider formula to calculate Rs from the original sensor voltage.
-  // Rs = (Vc * RL / Vout) - RL
-  // Vc = 5V
+  if (sensor_volt <= 0) return 0; // Avoid division by zero
   float rs_gas = (5.0 * LOAD_RESISTOR_VALUE / sensor_volt) - LOAD_RESISTOR_VALUE;
   return rs_gas;
+}
+
+
+/**
+ * @brief Reads the voltage at the ESP32 pin and calculates the original sensor voltage.
+ * @return The sensor's actual output voltage (before the voltage divider).
+ */
+float readOriginalSensorVoltage() {
+  int sensorValue = analogRead(SENSOR_ANALOG_PIN);
+  float v_out_divided = (sensorValue / 4095.0) * 3.3;
+
+  // Reverse the voltage divider formula: V_sensor = V_out_divided * (R1 + R2) / R2
+  return v_out_divided * (R1_VALUE + R2_VALUE) / R2_VALUE;
 }
