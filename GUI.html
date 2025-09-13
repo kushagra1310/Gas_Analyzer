@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas Analyzer Dashboard - Banana Chips</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #2d1b69 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .team-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b35, #f7931e, #ffeb3b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .project-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00d4ff, #5b86e5, #36d1dc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 107, 53, 0.8)); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sensors-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            gap: 2rem;
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(91, 134, 229, 0.1));
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .sensor-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sensor-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .sensor-item:hover::before {
+            left: 100%;
+        }
+
+        .sensor-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 212, 255, 0.3);
+            border-color: rgba(0, 212, 255, 0.5);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(91, 134, 229, 0.1));
+        }
+
+        .sensor-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-on .status-dot {
+            background: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+        }
+
+        .status-off .status-dot {
+            background: #ff4757;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .sensor-data {
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .status-bar {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            color: #00d4ff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95), rgba(26, 26, 58, 0.95));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            animation: modalSlide 0.4s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4ff;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            transform: scale(1.1);
+        }
+
+        .sensor-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .info-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ff88;
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label {
+            color: #bbb;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            height: 300px;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.8), transparent);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="stars" id="stars"></div>
+    <div class="floating-particles" id="particles"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="team-name">🍌 BANANA CHIPS</div>
+            <div class="project-title">GAS ANALYZER</div>
+        </div>
+
+        <div class="dashboard">
+            <div class="sensors-header">
+                <div>SENSOR</div>
+                <div style="text-align: center;">STATUS</div>
+                <div style="text-align: center;">LIVE DATA</div>
+            </div>
+
+            <div id="sensor-list">
+                <!-- Sensor items will be generated here -->
+            </div>
+
+            <div class="status-bar" id="status-bar">
+                Initializing system...
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for sensor details -->
+    <div class="modal" id="sensor-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">SENSOR DETAILS</div>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="sensor-info">
+                <div class="info-card">
+                    <div class="info-value" id="current-reading">---</div>
+                    <div class="info-label">Current Reading</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-value" id="active-since">---</div>
+                    <div class="info-label">Active Since</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="sensor-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sensor configuration
+        const SENSORS = {
+            "MQ-2": { 
+                status: "On", 
+                unit: "PPM", 
+                startTime: new Date(Date.now() - Math.random() * 5 * 60 * 60 * 1000),
+                type: "Combustible Gas"
+            },
+            "MQ-7": { 
+                status: "On", 
+                unit: "PPM", 
+                startTime: new Date(Date.now() - Math.random() * 5 * 60 * 60 * 1000),
+                type: "Carbon Monoxide"
+            },
+            "MQ-135": { 
+                status: "Off", 
+                unit: "PPM", 
+                startTime: null,
+                type: "Air Quality"
+            },
+            "MQ-136": { 
+                status: "On", 
+                unit: "PPM", 
+                startTime: new Date(Date.now() - Math.random() * 5 * 60 * 60 * 1000),
+                type: "Hydrogen Sulfide"
+            },
+            "MQ-137": { 
+                status: "On", 
+                unit: "PPM", 
+                startTime: new Date(Date.now() - Math.random() * 5 * 60 * 60 * 1000),
+                type: "Ammonia"
+            }
+        };
+
+        // Historical data for graphs
+        const sensorData = {};
+        for (let sensor in SENSORS) {
+            sensorData[sensor] = Array.from({length: 50}, () => Math.random() * 250 + 50);
+        }
+
+        let currentChart = null;
+        let currentSensor = null;
+
+        // Create animated background stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Generate sensor list
+        function generateSensorList() {
+            const sensorList = document.getElementById('sensor-list');
+            sensorList.innerHTML = '';
+
+            for (let [sensorName, details] of Object.entries(SENSORS)) {
+                const sensorItem = document.createElement('div');
+                sensorItem.className = 'sensor-item';
+                sensorItem.onclick = () => openSensorDetail(sensorName);
+
+                const currentReading = details.status === 'On' ? 
+                    (sensorData[sensorName][sensorData[sensorName].length - 1]).toFixed(2) + ' ' + details.unit : 
+                    '---';
+
+                sensorItem.innerHTML = `
+                    <div class="sensor-name">${sensorName}</div>
+                    <div class="status-indicator status-${details.status.toLowerCase()}">
+                        <span class="status-dot"></span>
+                        ${details.status.toUpperCase()}
+                    </div>
+                    <div class="sensor-data">${currentReading}</div>
+                `;
+
+                sensorList.appendChild(sensorItem);
+            }
+        }
+
+        // Update sensor readings
+        function updateSensorData() {
+            for (let sensorName in SENSORS) {
+                if (SENSORS[sensorName].status === 'On') {
+                    // Add new reading
+                    const newReading = Math.random() * 250 + 50;
+                    sensorData[sensorName].shift();
+                    sensorData[sensorName].push(newReading);
+                }
+            }
+
+            generateSensorList();
+            
+            // Update status bar
+            const now = new Date();
+            document.getElementById('status-bar').textContent = 
+                `System Status: ONLINE | Last Update: ${now.toLocaleTimeString()}`;
+
+            // Update modal if open
+            if (currentSensor && document.getElementById('sensor-modal').style.display === 'block') {
+                updateModalData();
+            }
+        }
+
+        // Open sensor detail modal
+        function openSensorDetail(sensorName) {
+            currentSensor = sensorName;
+            const modal = document.getElementById('sensor-modal');
+            const modalTitle = document.getElementById('modal-title');
+            
+            modalTitle.textContent = `${sensorName} DETAILS`;
+            modal.style.display = 'block';
+            
+            updateModalData();
+            createChart();
+        }
+
+        // Update modal data
+        function updateModalData() {
+            const sensor = SENSORS[currentSensor];
+            const currentReadingEl = document.getElementById('current-reading');
+            const activeSinceEl = document.getElementById('active-since');
+
+            if (sensor.status === 'On') {
+                const currentReading = sensorData[currentSensor][sensorData[currentSensor].length - 1];
+                currentReadingEl.textContent = currentReading.toFixed(2) + ' ' + sensor.unit;
+                
+                if (sensor.startTime) {
+                    const hours = Math.floor((Date.now() - sensor.startTime.getTime()) / (1000 * 60 * 60));
+                    const minutes = Math.floor(((Date.now() - sensor.startTime.getTime()) % (1000 * 60 * 60)) / (1000 * 60));
+                    activeSinceEl.textContent = `${hours}h ${minutes}m`;
+                }
+            } else {
+                currentReadingEl.textContent = 'OFFLINE';
+                activeSinceEl.textContent = '---';
+            }
+        }
+
+        // Create chart
+        function createChart() {
+            const ctx = document.getElementById('sensor-chart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            const data = sensorData[currentSensor];
+            const labels = Array.from({length: data.length}, (_, i) => i + 1);
+
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `${currentSensor} Reading (${SENSORS[currentSensor].unit})`,
+                        data: data,
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#00ff88',
+                        pointBorderColor: '#00d4ff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('sensor-modal').style.display = 'none';
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+            currentSensor = null;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('sensor-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize everything
+        function init() {
+            createStars();
+            createParticles();
+            generateSensorList();
+            
+            // Start updating data every 2 seconds
+            setInterval(updateSensorData, 2000);
+            updateSensorData();
+        }
+
+        // Start the application
+        init();
+    </script>
+</body>
+</html>
