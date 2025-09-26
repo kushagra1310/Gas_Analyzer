@@ -1,0 +1,549 @@
+21:54:42.189 -> Warmup remaining: 149s - Current reading: 36.77 kΩ
+21:55:12.708 -> Warmup remaining: 119s - Current reading: 50.71 kΩ
+21:55:43.185 -> Warmup remaining: 88s - Current reading: 51.69 kΩ
+21:56:13.665 -> Warmup remaining: 58s - Current reading: 51.85 kΩ
+21:56:44.209 -> Warmup remaining: 27s - Current reading: 51.88 kΩ
+21:57:12.202 -> 
+21:57:12.202 -> Warmup complete! Starting R0 calibration...
+21:57:12.203 -> Ensure sensor is still in CLEAN AIR!
+21:57:12.285 -> 
+21:57:12.285 -> === R0 CALIBRATION (Clean Air) ===
+21:57:12.285 -> Taking readings in clean air...
+21:57:12.795 -> Reading 1/50: 52.38 kΩ
+21:57:15.294 -> Reading 2/50: 52.47 kΩ
+21:57:17.803 -> Reading 3/50: 52.45 kΩ
+21:57:20.294 -> Reading 4/50: 52.55 kΩ
+21:57:22.811 -> Reading 5/50: 52.53 kΩ
+21:57:25.301 -> Reading 6/50: 52.51 kΩ
+21:57:27.795 -> Reading 7/50: 52.51 kΩ
+21:57:30.298 -> Reading 8/50: 52.52 kΩ
+21:57:32.782 -> Reading 9/50: 52.55 kΩ
+21:57:35.263 -> Reading 10/50: 52.52 kΩ
+21:57:37.794 -> Reading 11/50: 52.51 kΩ
+21:57:40.293 -> Reading 12/50: 52.47 kΩ
+21:57:42.777 -> Reading 13/50: 52.38 kΩ
+21:57:45.283 -> Reading 14/50: 52.43 kΩ
+21:57:47.782 -> Reading 15/50: 52.57 kΩ
+21:57:50.280 -> Reading 16/50: 52.52 kΩ
+21:57:52.809 -> Reading 17/50: 52.48 kΩ
+21:57:55.280 -> Reading 18/50: 52.38 kΩ
+21:57:57.778 -> Reading 19/50: 52.52 kΩ
+21:58:00.282 -> Reading 20/50: 52.56 kΩ
+21:58:02.797 -> Reading 21/50: 52.53 kΩ
+21:58:05.295 -> Reading 22/50: 52.56 kΩ
+21:58:07.794 -> Reading 23/50: 52.55 kΩ
+21:58:10.273 -> Reading 24/50: 52.56 kΩ
+21:58:12.777 -> Reading 25/50: 52.56 kΩ
+21:58:15.289 -> Reading 26/50: 52.56 kΩ
+21:58:17.759 -> Reading 27/50: 52.58 kΩ
+21:58:20.292 -> Reading 28/50: 52.63 kΩ
+21:58:22.791 -> Reading 29/50: 52.65 kΩ
+21:58:25.260 -> Reading 30/50: 52.60 kΩ
+21:58:27.793 -> Reading 31/50: 52.58 kΩ
+21:58:30.261 -> Reading 32/50: 52.55 kΩ
+21:58:32.794 -> Reading 33/50: 52.51 kΩ
+21:58:35.292 -> Reading 34/50: 52.57 kΩ
+21:58:37.778 -> Reading 35/50: 52.56 kΩ
+21:58:40.298 -> Reading 36/50: 52.36 kΩ
+21:58:42.759 -> Reading 37/50: 52.51 kΩ
+21:58:45.275 -> Reading 38/50: 52.50 kΩ
+21:58:47.777 -> Reading 39/50: 52.53 kΩ
+21:58:50.295 -> Reading 40/50: 52.52 kΩ
+21:58:52.791 -> Reading 41/50: 52.56 kΩ
+21:58:55.277 -> Reading 42/50: 52.51 kΩ
+21:58:57.776 -> Reading 43/50: 52.52 kΩ
+21:59:00.281 -> Reading 44/50: 52.55 kΩ
+21:59:02.805 -> Reading 45/50: 52.55 kΩ
+21:59:05.292 -> Reading 46/50: 52.55 kΩ
+21:59:07.772 -> Reading 47/50: 52.53 kΩ
+21:59:10.290 -> Reading 48/50: 52.55 kΩ
+21:59:12.793 -> Reading 49/50: 52.57 kΩ
+21:59:15.293 -> Reading 50/50: 52.57 kΩ
+21:59:17.270 -> 
+21:59:17.270 -> === R0 CALIBRATION RESULTS ===
+21:59:17.270 -> R0 (Clean Air): 52.524 kΩ
+21:59:17.270 -> Standard Deviation: 0.059 kΩ
+21:59:17.270 -> Coefficient of Variation: 0.11%
+21:59:17.270 -> ✓ R0 Calibration Quality: EXCELLENT
+21:59:17.270 -> 
+21:59:17.270 -> === CO CONCENTRATION CALIBRATION ===
+21:59:17.303 -> Commands:
+21:59:17.303 ->   add [PPM] - Start calibration for specific CO concentration
+21:59:17.303 ->             Example: add 100 (for 100 PPM CO)
+21:59:17.303 ->   analyze   - Analyze data and generate calibration curve
+21:59:17.303 ->   help      - Show these instructions
+21:59:17.303 -> 
+21:59:17.303 -> Current calibration points: 0
+21:59:17.303 -> Recommended: 5-10 points across 10-1000 PPM range
+21:59:17.303 -> Example sequence: add 10, add 50, add 100, add 200, add 500
+21:59:17.303 -> =====================================
+22:02:34.994 -> Warmup remaining: 149s
+22:03:05.027 -> Warmup remaining: 119s
+22:03:35.027 -> Warmup remaining: 89s
+22:04:04.995 -> Warmup remaining: 59s
+22:04:34.995 -> Warmup remaining: 29s
+22:05:05.009 -> 
+22:05:05.009 -> Warmup complete! Starting R0 calibration...
+22:05:05.108 -> 
+22:05:05.108 -> Calibrating R0 in clean air, please keep sensor exposed to clean air...
+22:05:05.592 -> Reading 1/50: 52.02 kΩ
+22:05:07.093 -> Reading 2/50: 52.03 kΩ
+22:05:08.592 -> Reading 3/50: 52.18 kΩ
+22:05:10.091 -> Reading 4/50: 52.28 kΩ
+22:05:11.609 -> Reading 5/50: 52.18 kΩ
+22:05:13.091 -> Reading 6/50: 52.22 kΩ
+22:05:14.593 -> Reading 7/50: 52.08 kΩ
+22:05:16.091 -> Reading 8/50: 51.80 kΩ
+22:05:17.592 -> Reading 9/50: 51.71 kΩ
+22:05:19.108 -> Reading 10/50: 51.71 kΩ
+22:05:20.590 -> Reading 11/50: 51.93 kΩ
+22:05:22.109 -> Reading 12/50: 51.81 kΩ
+22:05:23.591 -> Reading 13/50: 51.23 kΩ
+22:05:25.107 -> Reading 14/50: 50.95 kΩ
+22:05:26.592 -> Reading 15/50: 51.30 kΩ
+22:05:28.092 -> Reading 16/50: 51.35 kΩ
+22:05:29.608 -> Reading 17/50: 51.04 kΩ
+22:05:31.109 -> Reading 18/50: 51.74 kΩ
+22:05:32.610 -> Reading 19/50: 51.21 kΩ
+22:05:34.110 -> Reading 20/50: 50.86 kΩ
+22:05:35.609 -> Reading 21/50: 51.55 kΩ
+22:05:37.123 -> Reading 22/50: 50.69 kΩ
+22:05:38.591 -> Reading 23/50: 51.41 kΩ
+22:05:40.089 -> Reading 24/50: 50.56 kΩ
+22:05:41.589 -> Reading 25/50: 50.54 kΩ
+22:05:43.106 -> Reading 26/50: 51.68 kΩ
+22:05:44.590 -> Reading 27/50: 51.57 kΩ
+22:05:46.092 -> Reading 28/50: 58.35 kΩ
+22:05:47.590 -> Reading 29/50: 58.29 kΩ
+22:05:49.106 -> Reading 30/50: 58.17 kΩ
+22:05:50.592 -> Reading 31/50: 58.05 kΩ
+22:05:52.090 -> Reading 32/50: 57.79 kΩ
+22:05:53.590 -> Reading 33/50: 57.56 kΩ
+22:05:55.123 -> Reading 34/50: 57.43 kΩ
+22:05:56.591 -> Reading 35/50: 57.27 kΩ
+22:05:58.090 -> Reading 36/50: 57.24 kΩ
+22:05:59.589 -> Reading 37/50: 57.19 kΩ
+22:06:01.113 -> Reading 38/50: 57.13 kΩ
+22:06:02.592 -> Reading 39/50: 57.11 kΩ
+22:06:04.091 -> Reading 40/50: 57.09 kΩ
+22:06:05.591 -> Reading 41/50: 57.02 kΩ
+22:06:07.089 -> Reading 42/50: 56.95 kΩ
+22:06:08.605 -> Reading 43/50: 56.97 kΩ
+22:06:10.114 -> Reading 44/50: 56.86 kΩ
+22:06:11.589 -> Reading 45/50: 56.86 kΩ
+22:06:13.089 -> Reading 46/50: 56.87 kΩ
+22:06:14.606 -> Reading 47/50: 56.86 kΩ
+22:06:16.087 -> Reading 48/50: 56.84 kΩ
+22:06:17.605 -> Reading 49/50: 56.90 kΩ
+22:06:19.089 -> Reading 50/50: 56.90 kΩ
+22:06:20.091 -> 
+22:06:20.091 -> R0 (clean air resistance): 54.186 kΩ
+22:06:20.091 -> Commands:
+22:06:20.091 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+22:06:20.139 ->  analyze      - Fit curve with collected points
+22:06:20.139 ->  help         - Show commands
+22:06:20.139 -> Currently collected points: 0
+22:13:33.010 -> Starting calibration for ppm: 350.00
+22:13:33.592 -> Stabilizing... 119s left, Rs/R0: 0.799
+22:13:44.092 -> Stabilizing... 109s left, Rs/R0: 0.808
+22:13:54.591 -> Stabilizing... 98s left, Rs/R0: 0.810
+22:14:05.091 -> Stabilizing... 88s left, Rs/R0: 0.808
+22:14:15.590 -> Stabilizing... 77s left, Rs/R0: 0.811
+22:14:26.105 -> Stabilizing... 67s left, Rs/R0: 0.810
+22:14:36.608 -> Stabilizing... 56s left, Rs/R0: 0.813
+22:14:47.105 -> Stabilizing... 46s left, Rs/R0: 0.819
+22:14:57.587 -> Stabilizing... 35s left, Rs/R0: 0.824
+22:15:08.120 -> Stabilizing... 25s left, Rs/R0: 0.837
+22:15:18.588 -> Stabilizing... 14s left, Rs/R0: 0.832
+22:15:29.104 -> Stabilizing... 4s left, Rs/R0: 0.825
+22:15:33.487 -> Reading 1/30: Rs = 44.58 kΩ, Rs/R0 = 0.823
+22:15:35.003 -> Reading 2/30: Rs = 44.39 kΩ, Rs/R0 = 0.819
+22:15:36.506 -> Reading 3/30: Rs = 44.48 kΩ, Rs/R0 = 0.821
+22:15:37.987 -> Reading 4/30: Rs = 44.38 kΩ, Rs/R0 = 0.819
+22:15:39.487 -> Reading 5/30: Rs = 44.32 kΩ, Rs/R0 = 0.818
+22:15:40.987 -> Reading 6/30: Rs = 44.35 kΩ, Rs/R0 = 0.818
+22:15:42.519 -> Reading 7/30: Rs = 44.36 kΩ, Rs/R0 = 0.819
+22:15:43.986 -> Reading 8/30: Rs = 44.40 kΩ, Rs/R0 = 0.819
+22:15:45.488 -> Reading 9/30: Rs = 44.42 kΩ, Rs/R0 = 0.820
+22:15:46.985 -> Reading 10/30: Rs = 44.50 kΩ, Rs/R0 = 0.821
+22:15:48.505 -> Reading 11/30: Rs = 44.52 kΩ, Rs/R0 = 0.822
+22:15:50.003 -> Reading 12/30: Rs = 44.39 kΩ, Rs/R0 = 0.819
+22:15:51.504 -> Reading 13/30: Rs = 44.49 kΩ, Rs/R0 = 0.821
+22:15:52.986 -> Reading 14/30: Rs = 44.51 kΩ, Rs/R0 = 0.821
+22:15:54.501 -> Reading 15/30: Rs = 44.49 kΩ, Rs/R0 = 0.821
+22:15:55.985 -> Reading 16/30: Rs = 43.86 kΩ, Rs/R0 = 0.809
+22:15:57.485 -> Reading 17/30: Rs = 43.58 kΩ, Rs/R0 = 0.804
+22:15:58.987 -> Reading 18/30: Rs = 43.65 kΩ, Rs/R0 = 0.806
+22:16:00.502 -> Reading 19/30: Rs = 43.75 kΩ, Rs/R0 = 0.807
+22:16:01.984 -> Reading 20/30: Rs = 43.92 kΩ, Rs/R0 = 0.811
+22:16:03.501 -> Reading 21/30: Rs = 44.18 kΩ, Rs/R0 = 0.815
+22:16:05.002 -> Reading 22/30: Rs = 44.33 kΩ, Rs/R0 = 0.818
+22:16:06.500 -> Reading 23/30: Rs = 44.52 kΩ, Rs/R0 = 0.822
+22:16:08.018 -> Reading 24/30: Rs = 44.72 kΩ, Rs/R0 = 0.825
+22:16:09.501 -> Reading 25/30: Rs = 44.78 kΩ, Rs/R0 = 0.826
+22:16:10.984 -> Reading 26/30: Rs = 44.95 kΩ, Rs/R0 = 0.829
+22:16:12.504 -> Reading 27/30: Rs = 44.98 kΩ, Rs/R0 = 0.830
+22:16:14.002 -> Reading 28/30: Rs = 45.15 kΩ, Rs/R0 = 0.833
+22:16:15.483 -> Reading 29/30: Rs = 45.15 kΩ, Rs/R0 = 0.833
+22:16:16.984 -> Reading 30/30: Rs = 45.21 kΩ, Rs/R0 = 0.834
+22:16:16.984 -> 
+22:16:16.984 -> === Calibration point complete ===
+22:16:16.984 -> Concentration (ppm): 350.0
+22:16:16.984 -> Average Rs: 44.444 kΩ
+22:16:17.017 -> Rs/R0 ratio: 0.8202
+22:16:17.017 -> Std dev: 0.4065 kΩ
+22:16:17.017 -> Commands:
+22:16:17.017 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+22:16:17.017 ->  analyze      - Fit curve with collected points
+22:16:17.017 ->  help         - Show commands
+22:16:17.017 -> Currently collected points: 1
+22:25:17.448 -> Warmup remaining: 149s
+22:25:47.428 -> Warmup remaining: 119s
+22:26:17.444 -> Warmup remaining: 89s
+22:26:47.441 -> Warmup remaining: 59s
+22:27:17.441 -> Warmup remaining: 29s
+22:27:47.422 -> 
+22:27:47.422 -> Warmup complete! Starting R0 calibration...
+22:27:47.522 -> 
+22:27:47.522 -> Calibrating R0 in clean air, please keep sensor exposed to clean air...
+22:27:48.021 -> Reading 1/50: 60.01 kΩ
+22:27:49.539 -> Reading 2/50: 60.14 kΩ
+22:27:51.022 -> Reading 3/50: 59.81 kΩ
+22:27:52.538 -> Reading 4/50: 60.35 kΩ
+22:27:54.038 -> Reading 5/50: 60.14 kΩ
+22:27:55.539 -> Reading 6/50: 60.03 kΩ
+22:27:57.038 -> Reading 7/50: 60.23 kΩ
+22:27:58.538 -> Reading 8/50: 60.22 kΩ
+22:28:00.038 -> Reading 9/50: 60.12 kΩ
+22:28:01.540 -> Reading 10/50: 60.25 kΩ
+22:28:03.038 -> Reading 11/50: 60.04 kΩ
+22:28:04.540 -> Reading 12/50: 60.25 kΩ
+22:28:06.021 -> Reading 13/50: 60.17 kΩ
+22:28:07.521 -> Reading 14/50: 60.25 kΩ
+22:28:09.039 -> Reading 15/50: 60.30 kΩ
+22:28:10.523 -> Reading 16/50: 60.14 kΩ
+22:28:12.023 -> Reading 17/50: 59.75 kΩ
+22:28:13.540 -> Reading 18/50: 60.27 kΩ
+22:28:15.023 -> Reading 19/50: 60.17 kΩ
+22:28:16.522 -> Reading 20/50: 59.92 kΩ
+22:28:18.020 -> Reading 21/50: 60.38 kΩ
+22:28:19.537 -> Reading 22/50: 60.54 kΩ
+22:28:21.023 -> Reading 23/50: 60.20 kΩ
+22:28:22.539 -> Reading 24/50: 60.08 kΩ
+22:28:24.021 -> Reading 25/50: 60.14 kΩ
+22:28:25.538 -> Reading 26/50: 60.46 kΩ
+22:28:27.023 -> Reading 27/50: 60.22 kΩ
+22:28:28.553 -> Reading 28/50: 60.22 kΩ
+22:28:30.022 -> Reading 29/50: 60.17 kΩ
+22:28:31.522 -> Reading 30/50: 60.46 kΩ
+22:28:33.038 -> Reading 31/50: 60.30 kΩ
+22:28:34.522 -> Reading 32/50: 60.22 kΩ
+22:28:36.018 -> Reading 33/50: 60.22 kΩ
+22:28:37.537 -> Reading 34/50: 60.20 kΩ
+22:28:39.038 -> Reading 35/50: 60.49 kΩ
+22:28:40.537 -> Reading 36/50: 60.97 kΩ
+22:28:42.021 -> Reading 37/50: 60.33 kΩ
+22:28:43.537 -> Reading 38/50: 60.38 kΩ
+22:28:45.019 -> Reading 39/50: 60.03 kΩ
+22:28:46.523 -> Reading 40/50: 60.25 kΩ
+22:28:48.036 -> Reading 41/50: 60.30 kΩ
+22:28:49.534 -> Reading 42/50: 60.28 kΩ
+22:28:51.036 -> Reading 43/50: 60.22 kΩ
+22:28:52.521 -> Reading 44/50: 60.46 kΩ
+22:28:54.019 -> Reading 45/50: 60.62 kΩ
+22:28:55.520 -> Reading 46/50: 60.31 kΩ
+22:28:57.038 -> Reading 47/50: 60.30 kΩ
+22:28:58.534 -> Reading 48/50: 60.62 kΩ
+22:29:00.019 -> Reading 49/50: 60.31 kΩ
+22:29:01.535 -> Reading 50/50: 60.41 kΩ
+22:29:02.536 -> 
+22:29:02.536 -> R0 (clean air resistance): 60.253 kΩ
+22:29:02.536 -> Commands:
+22:29:02.536 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+22:29:02.536 ->  analyze      - Fit curve with collected points
+22:29:02.536 ->  help         - Show commands
+22:29:02.536 -> Currently collected points: 0
+22:32:01.044 -> Starting calibration for ppm: 400.00
+22:32:01.645 -> Stabilizing... 119s left, Rs/R0: 1.104
+22:32:12.144 -> Stabilizing... 109s left, Rs/R0: 1.114
+22:32:22.625 -> Stabilizing... 98s left, Rs/R0: 1.122
+22:32:33.158 -> Stabilizing... 88s left, Rs/R0: 1.126
+22:32:43.642 -> Stabilizing... 77s left, Rs/R0: 1.124
+22:32:54.124 -> Stabilizing... 67s left, Rs/R0: 1.150
+22:33:04.639 -> Stabilizing... 56s left, Rs/R0: 1.154
+22:33:15.122 -> Stabilizing... 46s left, Rs/R0: 1.233
+22:33:25.639 -> Stabilizing... 35s left, Rs/R0: 1.233
+22:33:36.121 -> Stabilizing... 25s left, Rs/R0: 1.256
+22:33:46.620 -> Stabilizing... 14s left, Rs/R0: 1.258
+22:33:57.119 -> Stabilizing... 4s left, Rs/R0: 1.267
+22:34:01.519 -> Reading 1/30: Rs = 76.37 kΩ, Rs/R0 = 1.267
+22:34:05.020 -> Reading 2/30: Rs = 77.02 kΩ, Rs/R0 = 1.278
+22:34:08.536 -> Reading 3/30: Rs = 77.36 kΩ, Rs/R0 = 1.284
+22:34:12.036 -> Reading 4/30: Rs = 77.56 kΩ, Rs/R0 = 1.287
+22:34:15.517 -> Reading 5/30: Rs = 77.73 kΩ, Rs/R0 = 1.290
+22:34:19.017 -> Reading 6/30: Rs = 78.11 kΩ, Rs/R0 = 1.296
+22:34:22.533 -> Reading 7/30: Rs = 78.36 kΩ, Rs/R0 = 1.300
+22:34:26.018 -> Reading 8/30: Rs = 78.56 kΩ, Rs/R0 = 1.304
+22:34:29.535 -> Reading 9/30: Rs = 78.92 kΩ, Rs/R0 = 1.310
+22:34:33.016 -> Reading 10/30: Rs = 78.81 kΩ, Rs/R0 = 1.308
+22:34:36.533 -> Reading 11/30: Rs = 78.81 kΩ, Rs/R0 = 1.308
+22:34:40.035 -> Reading 12/30: Rs = 78.48 kΩ, Rs/R0 = 1.303
+22:34:43.531 -> Reading 13/30: Rs = 78.92 kΩ, Rs/R0 = 1.310
+22:34:47.051 -> Reading 14/30: Rs = 78.97 kΩ, Rs/R0 = 1.311
+22:34:50.531 -> Reading 15/30: Rs = 79.87 kΩ, Rs/R0 = 1.326
+22:34:54.014 -> Reading 16/30: Rs = 79.66 kΩ, Rs/R0 = 1.322
+22:34:57.532 -> Reading 17/30: Rs = 80.34 kΩ, Rs/R0 = 1.333
+22:35:01.032 -> Reading 18/30: Rs = 80.58 kΩ, Rs/R0 = 1.337
+22:35:04.513 -> Reading 19/30: Rs = 80.66 kΩ, Rs/R0 = 1.339
+22:35:08.013 -> Reading 20/30: Rs = 81.06 kΩ, Rs/R0 = 1.345
+22:35:11.514 -> Reading 21/30: Rs = 81.22 kΩ, Rs/R0 = 1.348
+22:35:15.018 -> Reading 22/30: Rs = 81.22 kΩ, Rs/R0 = 1.348
+22:35:18.531 -> Reading 23/30: Rs = 81.54 kΩ, Rs/R0 = 1.353
+22:35:22.032 -> Reading 24/30: Rs = 81.70 kΩ, Rs/R0 = 1.356
+22:35:25.530 -> Reading 25/30: Rs = 81.84 kΩ, Rs/R0 = 1.358
+22:35:29.030 -> Reading 26/30: Rs = 81.86 kΩ, Rs/R0 = 1.359
+22:35:32.530 -> Reading 27/30: Rs = 82.16 kΩ, Rs/R0 = 1.364
+22:35:36.013 -> Reading 28/30: Rs = 82.25 kΩ, Rs/R0 = 1.365
+22:35:39.514 -> Reading 29/30: Rs = 82.30 kΩ, Rs/R0 = 1.366
+22:35:43.012 -> Reading 30/30: Rs = 82.33 kΩ, Rs/R0 = 1.366
+22:35:43.012 -> 
+22:35:43.012 -> === Calibration point complete ===
+22:35:43.046 -> Concentration (ppm): 400.0
+22:35:43.046 -> Average Rs: 79.819 kΩ
+22:35:43.046 -> Rs/R0 ratio: 1.3247
+22:35:43.046 -> Std dev: 1.7671 kΩ
+22:35:43.046 -> Commands:
+22:35:43.046 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+22:35:43.046 ->  analyze      - Fit curve with collected points
+22:35:43.046 ->  help         - Show commands
+22:35:43.046 -> Currently collected points: 1
+22:40:33.032 -> Starting calibration for ppm: 855.00
+22:40:33.632 -> Stabilizing... 119s left, Rs/R0: 0.677
+22:40:44.134 -> Stabilizing... 109s left, Rs/R0: 0.665
+22:40:54.648 -> Stabilizing... 98s left, Rs/R0: 0.659
+22:41:05.166 -> Stabilizing... 88s left, Rs/R0: 0.659
+22:41:15.663 -> Stabilizing... 77s left, Rs/R0: 0.661
+22:41:26.117 -> Stabilizing... 67s left, Rs/R0: 0.661
+22:41:36.646 -> Stabilizing... 56s left, Rs/R0: 0.670
+22:41:47.145 -> Stabilizing... 46s left, Rs/R0: 0.671
+22:41:57.628 -> Stabilizing... 35s left, Rs/R0: 0.674
+22:42:08.127 -> Stabilizing... 25s left, Rs/R0: 0.679
+22:42:18.647 -> Stabilizing... 14s left, Rs/R0: 0.682
+22:42:29.127 -> Stabilizing... 4s left, Rs/R0: 0.715
+22:42:33.545 -> Reading 1/30: Rs = 41.23 kΩ, Rs/R0 = 0.684
+22:42:37.027 -> Reading 2/30: Rs = 41.38 kΩ, Rs/R0 = 0.687
+22:42:40.526 -> Reading 3/30: Rs = 41.52 kΩ, Rs/R0 = 0.689
+22:42:44.028 -> Reading 4/30: Rs = 41.37 kΩ, Rs/R0 = 0.687
+22:42:47.513 -> Reading 5/30: Rs = 41.40 kΩ, Rs/R0 = 0.687
+22:42:51.026 -> Reading 6/30: Rs = 41.62 kΩ, Rs/R0 = 0.691
+22:42:54.526 -> Reading 7/30: Rs = 41.99 kΩ, Rs/R0 = 0.697
+22:42:58.042 -> Reading 8/30: Rs = 42.23 kΩ, Rs/R0 = 0.701
+22:43:01.543 -> Reading 9/30: Rs = 42.10 kΩ, Rs/R0 = 0.699
+22:43:05.027 -> Reading 10/30: Rs = 42.22 kΩ, Rs/R0 = 0.701
+22:43:08.541 -> Reading 11/30: Rs = 42.46 kΩ, Rs/R0 = 0.705
+22:43:12.024 -> Reading 12/30: Rs = 42.41 kΩ, Rs/R0 = 0.704
+22:43:15.525 -> Reading 13/30: Rs = 42.63 kΩ, Rs/R0 = 0.708
+22:43:19.026 -> Reading 14/30: Rs = 42.68 kΩ, Rs/R0 = 0.708
+22:43:22.542 -> Reading 15/30: Rs = 42.53 kΩ, Rs/R0 = 0.706
+22:43:26.041 -> Reading 16/30: Rs = 42.65 kΩ, Rs/R0 = 0.708
+22:43:29.540 -> Reading 17/30: Rs = 42.87 kΩ, Rs/R0 = 0.711
+22:43:33.041 -> Reading 18/30: Rs = 42.98 kΩ, Rs/R0 = 0.713
+22:43:36.512 -> Reading 19/30: Rs = 43.16 kΩ, Rs/R0 = 0.716
+22:43:40.024 -> Reading 20/30: Rs = 43.11 kΩ, Rs/R0 = 0.716
+22:43:43.540 -> Reading 21/30: Rs = 43.43 kΩ, Rs/R0 = 0.721
+22:43:47.024 -> Reading 22/30: Rs = 43.46 kΩ, Rs/R0 = 0.721
+22:43:50.522 -> Reading 23/30: Rs = 43.62 kΩ, Rs/R0 = 0.724
+22:43:54.024 -> Reading 24/30: Rs = 43.50 kΩ, Rs/R0 = 0.722
+22:43:57.521 -> Reading 25/30: Rs = 43.54 kΩ, Rs/R0 = 0.723
+22:44:01.023 -> Reading 26/30: Rs = 43.54 kΩ, Rs/R0 = 0.723
+22:44:04.538 -> Reading 27/30: Rs = 43.89 kΩ, Rs/R0 = 0.728
+22:44:08.039 -> Reading 28/30: Rs = 43.77 kΩ, Rs/R0 = 0.727
+22:44:11.522 -> Reading 29/30: Rs = 43.86 kΩ, Rs/R0 = 0.728
+22:44:15.020 -> Reading 30/30: Rs = 43.88 kΩ, Rs/R0 = 0.728
+22:44:15.020 -> 
+22:44:15.020 -> === Calibration point complete ===
+22:44:15.020 -> Concentration (ppm): 855.0
+22:44:15.020 -> Average Rs: 42.701 kΩ
+22:44:15.055 -> Rs/R0 ratio: 0.7087
+22:44:15.055 -> Std dev: 0.8400 kΩ
+22:44:15.055 -> Commands:
+22:44:15.055 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+22:44:15.055 ->  analyze      - Fit curve with collected points
+22:44:15.055 ->  help         - Show commands
+22:44:15.055 -> Currently collected points: 2
+22:46:50.946 -> Starting calibration for ppm: 470.00
+22:46:51.558 -> Stabilizing... 119s left, Rs/R0: 1.395
+22:47:02.045 -> Stabilizing... 109s left, Rs/R0: 1.407
+22:47:12.545 -> Stabilizing... 98s left, Rs/R0: 1.425
+22:47:23.029 -> Stabilizing... 88s left, Rs/R0: 1.440
+22:47:33.545 -> Stabilizing... 77s left, Rs/R0: 1.454
+22:47:44.028 -> Stabilizing... 67s left, Rs/R0: 1.462
+22:47:54.527 -> Stabilizing... 56s left, Rs/R0: 1.478
+22:48:05.027 -> Stabilizing... 46s left, Rs/R0: 1.494
+22:48:15.525 -> Stabilizing... 35s left, Rs/R0: 1.498
+22:48:26.025 -> Stabilizing... 25s left, Rs/R0: 1.517
+22:48:36.540 -> Stabilizing... 14s left, Rs/R0: 1.526
+22:48:47.025 -> Stabilizing... 4s left, Rs/R0: 1.528
+22:48:51.442 -> Reading 1/30: Rs = 92.12 kΩ, Rs/R0 = 1.529
+22:48:54.942 -> Reading 2/30: Rs = 92.18 kΩ, Rs/R0 = 1.530
+22:48:58.441 -> Reading 3/30: Rs = 92.39 kΩ, Rs/R0 = 1.533
+22:49:01.941 -> Reading 4/30: Rs = 92.69 kΩ, Rs/R0 = 1.538
+22:49:05.422 -> Reading 5/30: Rs = 93.00 kΩ, Rs/R0 = 1.543
+22:49:08.956 -> Reading 6/30: Rs = 93.00 kΩ, Rs/R0 = 1.543
+22:49:12.438 -> Reading 7/30: Rs = 93.37 kΩ, Rs/R0 = 1.550
+22:49:15.939 -> Reading 8/30: Rs = 93.58 kΩ, Rs/R0 = 1.553
+22:49:19.422 -> Reading 9/30: Rs = 94.00 kΩ, Rs/R0 = 1.560
+22:49:22.939 -> Reading 10/30: Rs = 94.31 kΩ, Rs/R0 = 1.565
+22:49:26.438 -> Reading 11/30: Rs = 94.52 kΩ, Rs/R0 = 1.569
+22:49:29.973 -> Reading 12/30: Rs = 94.63 kΩ, Rs/R0 = 1.571
+22:49:33.440 -> Reading 13/30: Rs = 95.05 kΩ, Rs/R0 = 1.578
+22:49:36.938 -> Reading 14/30: Rs = 94.91 kΩ, Rs/R0 = 1.575
+22:49:40.440 -> Reading 15/30: Rs = 95.02 kΩ, Rs/R0 = 1.577
+22:49:43.940 -> Reading 16/30: Rs = 95.13 kΩ, Rs/R0 = 1.579
+22:49:47.421 -> Reading 17/30: Rs = 95.41 kΩ, Rs/R0 = 1.584
+22:49:50.937 -> Reading 18/30: Rs = 95.56 kΩ, Rs/R0 = 1.586
+22:49:54.438 -> Reading 19/30: Rs = 96.06 kΩ, Rs/R0 = 1.594
+22:49:57.940 -> Reading 20/30: Rs = 96.13 kΩ, Rs/R0 = 1.595
+22:50:01.437 -> Reading 21/30: Rs = 96.42 kΩ, Rs/R0 = 1.600
+22:50:04.920 -> Reading 22/30: Rs = 96.39 kΩ, Rs/R0 = 1.600
+22:50:08.437 -> Reading 23/30: Rs = 96.90 kΩ, Rs/R0 = 1.608
+22:50:11.938 -> Reading 24/30: Rs = 96.97 kΩ, Rs/R0 = 1.609
+22:50:15.438 -> Reading 25/30: Rs = 97.12 kΩ, Rs/R0 = 1.612
+22:50:18.921 -> Reading 26/30: Rs = 97.20 kΩ, Rs/R0 = 1.613
+22:50:22.420 -> Reading 27/30: Rs = 97.42 kΩ, Rs/R0 = 1.617
+22:50:25.919 -> Reading 28/30: Rs = 97.38 kΩ, Rs/R0 = 1.616
+22:50:29.451 -> Reading 29/30: Rs = 97.91 kΩ, Rs/R0 = 1.625
+22:50:32.936 -> Reading 30/30: Rs = 97.91 kΩ, Rs/R0 = 1.625
+22:50:32.936 -> 
+22:50:32.936 -> === Calibration point complete ===
+22:50:32.936 -> Concentration (ppm): 470.0
+22:50:32.936 -> Average Rs: 95.156 kΩ
+22:50:32.936 -> Rs/R0 ratio: 1.5793
+22:50:32.936 -> Std dev: 1.7733 kΩ
+22:50:32.936 -> Commands:
+22:50:32.936 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+22:50:32.969 ->  analyze      - Fit curve with collected points
+22:50:32.969 ->  help         - Show commands
+22:50:32.969 -> Currently collected points: 3
+
+
+23:15:13.061 -> Warmup remaining: 149s
+23:15:43.028 -> Warmup remaining: 119s
+23:16:13.068 -> Warmup remaining: 89s
+23:16:43.065 -> Warmup remaining: 59s
+23:17:13.024 -> Warmup remaining: 29s
+23:17:43.059 -> 
+23:17:43.059 -> Warmup complete! Starting R0 calibration...
+23:17:43.159 -> 
+23:17:43.159 -> Calibrating R0 in clean air, please keep sensor exposed to clean air...
+23:17:43.635 -> Reading 1/50: 205.89 kΩ
+23:17:45.122 -> Reading 2/50: 207.55 kΩ
+23:17:46.659 -> Reading 3/50: 206.34 kΩ
+23:17:48.149 -> Reading 4/50: 205.59 kΩ
+23:17:49.633 -> Reading 5/50: 205.89 kΩ
+23:17:51.160 -> Reading 6/50: 205.74 kΩ
+23:17:52.647 -> Reading 7/50: 206.19 kΩ
+23:17:54.121 -> Reading 8/50: 206.04 kΩ
+23:17:55.665 -> Reading 9/50: 205.59 kΩ
+23:17:57.148 -> Reading 10/50: 206.04 kΩ
+23:17:58.666 -> Reading 11/50: 206.34 kΩ
+23:18:00.123 -> Reading 12/50: 204.69 kΩ
+23:18:01.629 -> Reading 13/50: 206.19 kΩ
+23:18:03.132 -> Reading 14/50: 205.59 kΩ
+23:18:04.649 -> Reading 15/50: 207.55 kΩ
+23:18:06.121 -> Reading 16/50: 205.59 kΩ
+23:18:07.663 -> Reading 17/50: 206.34 kΩ
+23:18:09.133 -> Reading 18/50: 206.49 kΩ
+23:18:10.620 -> Reading 19/50: 206.64 kΩ
+23:18:12.125 -> Reading 20/50: 206.19 kΩ
+23:18:13.621 -> Reading 21/50: 206.49 kΩ
+23:18:15.162 -> Reading 22/50: 206.34 kΩ
+23:18:16.657 -> Reading 23/50: 205.59 kΩ
+23:18:18.165 -> Reading 24/50: 206.04 kΩ
+23:18:19.629 -> Reading 25/50: 205.89 kΩ
+23:18:21.125 -> Reading 26/50: 206.19 kΩ
+23:18:22.659 -> Reading 27/50: 205.89 kΩ
+23:18:24.146 -> Reading 28/50: 207.25 kΩ
+23:18:25.645 -> Reading 29/50: 206.49 kΩ
+23:18:27.126 -> Reading 30/50: 206.04 kΩ
+23:18:28.647 -> Reading 31/50: 206.49 kΩ
+23:18:30.121 -> Reading 32/50: 206.19 kΩ
+23:18:31.620 -> Reading 33/50: 206.04 kΩ
+23:18:33.137 -> Reading 34/50: 206.04 kΩ
+23:18:34.663 -> Reading 35/50: 206.94 kΩ
+23:18:36.194 -> Reading 36/50: 206.79 kΩ
+23:18:37.644 -> Reading 37/50: 207.09 kΩ
+23:18:39.132 -> Reading 38/50: 206.34 kΩ
+23:18:40.642 -> Reading 39/50: 205.14 kΩ
+23:18:42.145 -> Reading 40/50: 206.94 kΩ
+23:18:43.648 -> Reading 41/50: 206.19 kΩ
+23:18:45.140 -> Reading 42/50: 207.25 kΩ
+23:18:46.662 -> Reading 43/50: 207.25 kΩ
+23:18:48.144 -> Reading 44/50: 206.19 kΩ
+23:18:49.660 -> Reading 45/50: 206.64 kΩ
+23:18:51.199 -> Reading 46/50: 206.49 kΩ
+23:18:52.622 -> Reading 47/50: 207.25 kΩ
+23:18:54.161 -> Reading 48/50: 205.89 kΩ
+23:18:55.648 -> Reading 49/50: 206.49 kΩ
+23:18:57.125 -> Reading 50/50: 206.49 kΩ
+23:18:58.158 -> 
+23:18:58.158 -> R0 (clean air resistance): 206.293 kΩ
+23:18:58.158 -> Commands:
+23:18:58.158 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+23:18:58.159 ->  analyze      - Fit curve with collected points
+23:18:58.159 ->  help         - Show commands
+23:18:58.159 -> Currently collected points: 0
+23:23:22.933 -> Starting calibration for ppm: 200.00
+23:23:23.539 -> Stabilizing... 119s left, Rs/R0: 0.442
+23:23:34.047 -> Stabilizing... 109s left, Rs/R0: 0.428
+23:23:44.532 -> Stabilizing... 98s left, Rs/R0: 0.441
+23:23:55.043 -> Stabilizing... 88s left, Rs/R0: 0.441
+23:24:05.545 -> Stabilizing... 77s left, Rs/R0: 0.453
+23:24:16.022 -> Stabilizing... 67s left, Rs/R0: 0.457
+23:24:26.580 -> Stabilizing... 56s left, Rs/R0: 0.462
+23:24:37.052 -> Stabilizing... 46s left, Rs/R0: 0.478
+23:24:47.543 -> Stabilizing... 35s left, Rs/R0: 0.476
+23:24:58.042 -> Stabilizing... 25s left, Rs/R0: 0.480
+23:25:08.522 -> Stabilizing... 14s left, Rs/R0: 0.483
+23:25:19.045 -> Stabilizing... 4s left, Rs/R0: 0.494
+23:25:23.441 -> Reading 1/30: Rs = 103.59 kΩ, Rs/R0 = 0.502
+23:25:26.937 -> Reading 2/30: Rs = 103.43 kΩ, Rs/R0 = 0.501
+23:25:30.470 -> Reading 3/30: Rs = 103.39 kΩ, Rs/R0 = 0.501
+23:25:33.941 -> Reading 4/30: Rs = 103.89 kΩ, Rs/R0 = 0.504
+23:25:37.440 -> Reading 5/30: Rs = 103.39 kΩ, Rs/R0 = 0.501
+23:25:40.959 -> Reading 6/30: Rs = 103.89 kΩ, Rs/R0 = 0.504
+23:25:44.440 -> Reading 7/30: Rs = 103.89 kΩ, Rs/R0 = 0.504
+23:25:47.956 -> Reading 8/30: Rs = 104.01 kΩ, Rs/R0 = 0.504
+23:25:51.441 -> Reading 9/30: Rs = 104.05 kΩ, Rs/R0 = 0.504
+23:25:54.943 -> Reading 10/30: Rs = 104.14 kΩ, Rs/R0 = 0.505
+23:25:58.436 -> Reading 11/30: Rs = 104.35 kΩ, Rs/R0 = 0.506
+23:26:01.918 -> Reading 12/30: Rs = 103.93 kΩ, Rs/R0 = 0.504
+23:26:05.438 -> Reading 13/30: Rs = 104.47 kΩ, Rs/R0 = 0.506
+23:26:08.958 -> Reading 14/30: Rs = 104.60 kΩ, Rs/R0 = 0.507
+23:26:12.438 -> Reading 15/30: Rs = 104.94 kΩ, Rs/R0 = 0.509
+23:26:15.938 -> Reading 16/30: Rs = 105.33 kΩ, Rs/R0 = 0.511
+23:26:19.417 -> Reading 17/30: Rs = 105.67 kΩ, Rs/R0 = 0.512
+23:26:22.939 -> Reading 18/30: Rs = 105.58 kΩ, Rs/R0 = 0.512
+23:26:26.416 -> Reading 19/30: Rs = 106.10 kΩ, Rs/R0 = 0.514
+23:26:29.935 -> Reading 20/30: Rs = 106.50 kΩ, Rs/R0 = 0.516
+23:26:33.416 -> Reading 21/30: Rs = 106.76 kΩ, Rs/R0 = 0.518
+23:26:36.941 -> Reading 22/30: Rs = 106.98 kΩ, Rs/R0 = 0.519
+23:26:40.453 -> Reading 23/30: Rs = 107.29 kΩ, Rs/R0 = 0.520
+23:26:43.923 -> Reading 24/30: Rs = 107.55 kΩ, Rs/R0 = 0.521
+23:26:47.454 -> Reading 25/30: Rs = 108.50 kΩ, Rs/R0 = 0.526
+23:26:50.952 -> Reading 26/30: Rs = 108.54 kΩ, Rs/R0 = 0.526
+23:26:54.438 -> Reading 27/30: Rs = 108.50 kΩ, Rs/R0 = 0.526
+23:26:57.917 -> Reading 28/30: Rs = 109.23 kΩ, Rs/R0 = 0.529
+23:27:01.417 -> Reading 29/30: Rs = 109.27 kΩ, Rs/R0 = 0.530
+23:27:04.918 -> Reading 30/30: Rs = 109.83 kΩ, Rs/R0 = 0.532
+23:27:04.918 -> 
+23:27:04.918 -> === Calibration point complete ===
+23:27:04.964 -> Concentration (ppm): 200.0
+23:27:04.964 -> Average Rs: 105.719 kΩ
+23:27:04.964 -> Rs/R0 ratio: 0.5125
+23:27:04.964 -> Std dev: 2.0167 kΩ
+23:27:04.964 -> Commands:
+23:27:04.964 ->  addref <ppm> - Enter CO ppm from industrial sensor and start calibration
+23:27:04.964 ->  analyze      - Fit curve with collected points
+23:27:04.964 ->  help         - Show commands
+23:27:04.964 -> Currently collected points: 1
