@@ -1,0 +1,52 @@
+#include <SPI.h>
+#include <LoRa.h>
+
+// --- LoRa Pin Definitions ---
+// IMPORTANT: Check your specific ESP32 LoRa board's pinout!
+#define LORA_NSS    5   // SPI Chip Select
+#define LORA_RST    14  // Reset
+#define LORA_DIO0   2   // IRQ (Interrupt Request)
+
+// --- Sensor Pin Definitions ---
+#define MQ135_PIN   34  // ADC pin for MQ-135
+#define MQ7_PIN     35  // ADC pin for MQ-7
+
+int counter = 0;
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial);
+
+  Serial.println("LoRa Transmitter");
+
+  // --- Initialize LoRa ---
+  LoRa.setPins(LORA_NSS, LORA_RST, LORA_DIO0);
+  // Set your LoRa frequency. 868E6 for Europe, 915E6 for Americas, 433E6 for Asia.
+  if (!LoRa.begin(433E6)) {
+    Serial.println("Starting LoRa failed!");
+    while (1);
+  }
+}
+
+void loop() {
+  // --- Read Sensor Values ---
+  // We'll send the raw ADC values (0-4095 for ESP32)
+  int mq135_value = analogRead(MQ135_PIN);
+  int mq7_value = analogRead(MQ7_PIN);
+
+  // --- Create Data Packet ---
+  // Format: "MQ135_VALUE,MQ7_VALUE,PACKET_COUNT"
+  String dataPacket = String(mq135_value) + "," + String(mq7_value) + "," + String(counter);
+
+  // --- Send LoRa Packet ---
+  LoRa.beginPacket();
+  LoRa.print(dataPacket);
+  LoRa.endPacket();
+
+  Serial.print("Sending packet: ");
+  Serial.println(dataPacket);
+
+  counter++;
+
+  delay(500); // Send data every 5 seconds
+}
