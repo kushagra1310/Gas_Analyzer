@@ -1,0 +1,18 @@
+Algorithms:
+1)LSTM
+2)KNN
+3)RF
+4)SVM
+
+
+References:
+https://www.mdpi.com/2571-5577/4/1/3
+https://pubmed.ncbi.nlm.nih.gov/39338648/
+https://www.iieta.org/journals/i2m/paper/10.18280/i2m.230405
+https://www.sciencedirect.com/science/article/pii/S0924424724005041
+https://pmc.ncbi.nlm.nih.gov/articles/PMC8309760/
+
+
+DataSet:
+	Reference:
+		https://www.kaggle.com/datasets/aryashah2k/multimodal-gas-detection-and-classification

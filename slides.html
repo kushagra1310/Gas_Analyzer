@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model Performance Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+        }
+        .slide {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            min-height: 100vh;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+        .slide-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 2rem;
+        }
+        p, li {
+            font-size: 1.125rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            background-color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .nav-button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #2563eb;
+        }
+        .nav-button:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            text-align: left;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        .detail-card {
+            background-color: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+        .detail-card-title {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+        .detail-card-content {
+            font-weight: 500;
+            color: #1e293b;
+            font-family: 'Courier New', Courier, monospace;
+            word-wrap: break-word;
+        }
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Introduction -->
+    <div id="slide1" class="slide active">
+        <div class="slide-container">
+            <h1 class="text-6xl font-bold text-gray-800">ML Model Performance Analysis</h1>
+            <p class="mt-4 text-xl text-gray-600">A Comparative Study of Classification Models for Gas Detection</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: KNN -->
+    <div id="slide2" class="slide">
+        <div class="slide-container">
+            <h2>K-Nearest Neighbors (KNN)</h2>
+            <div class="details-grid">
+                <div class="detail-card">
+                    <p class="detail-card-title">Test Accuracy</p>
+                    <p class="detail-card-content text-2xl text-blue-600">97.89%</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-card-title">Cross-Validation Score</p>
+                    <p class="detail-card-content text-2xl">97.40%</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-card-title">Best Parameters</p>
+                    <p class="detail-card-content text-sm">metric: 'euclidean'<br>n_neighbors: 3<br>weights: 'distance'</p>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Classification Report</h3>
+            <table>
+                <thead>
+                    <tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Support</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mixture</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                    <tr><td>NoGas</td><td>0.97</td><td>0.94</td><td>0.96</td><td>320</td></tr>
+                    <tr><td>Perfume</td><td>0.95</td><td>0.97</td><td>0.96</td><td>320</td></tr>
+                    <tr><td>Smoke</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 3: LSTM -->
+    <div id="slide3" class="slide">
+        <div class="slide-container">
+            <h2>Long Short-Term Memory (LSTM)</h2>
+             <div class="details-grid">
+                <div class="detail-card w-full">
+                    <p class="detail-card-title">Final Test Accuracy</p>
+                    <p class="detail-card-content text-2xl text-blue-600">95.70%</p>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Classification Report</h3>
+            <table>
+                <thead>
+                    <tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Support</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mixture</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                    <tr><td>NoGas</td><td>0.89</td><td>0.94</td><td>0.92</td><td>320</td></tr>
+                    <tr><td>Perfume</td><td>0.94</td><td>0.88</td><td>0.91</td><td>320</td></tr>
+                    <tr><td>Smoke</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 4: SVM -->
+    <div id="slide4" class="slide">
+        <div class="slide-container">
+            <h2>Support Vector Machine (SVM)</h2>
+            <div class="details-grid">
+                <div class="detail-card w-full">
+                    <p class="detail-card-title">Final Test Accuracy</p>
+                    <p class="detail-card-content text-2xl text-blue-600">96.33%</p>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Classification Report</h3>
+            <table>
+                <thead>
+                    <tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Support</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mixture</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                    <tr><td>NoGas</td><td>0.91</td><td>0.94</td><td>0.93</td><td>320</td></tr>
+                    <tr><td>Perfume</td><td>0.94</td><td>0.91</td><td>0.93</td><td>320</td></tr>
+                    <tr><td>Smoke</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 5: Random Forest -->
+    <div id="slide5" class="slide">
+        <div class="slide-container">
+            <h2>Random Forest (RF)</h2>
+            <div class="details-grid">
+                 <div class="detail-card">
+                    <p class="detail-card-title">Test Accuracy</p>
+                    <p class="detail-card-content text-2xl text-blue-600">97.34%</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-card-title">Cross-Validation Score</p>
+                    <p class="detail-card-content text-2xl">97.52%</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-card-title">Best Parameters</p>
+                    <p class="detail-card-content text-xs">max_depth: 30<br>max_features: 'sqrt'<br>min_samples_leaf: 1<br>min_samples_split: 2<br>n_estimators: 100</p>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Classification Report</h3>
+            <table>
+                <thead>
+                    <tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Support</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mixture</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                    <tr><td>NoGas</td><td>0.95</td><td>0.95</td><td>0.95</td><td>320</td></tr>
+                    <tr><td>Perfume</td><td>0.95</td><td>0.95</td><td>0.95</td><td>320</td></tr>
+                    <tr><td>Smoke</td><td>1.00</td><td>1.00</td><td>1.00</td><td>320</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 6: Conclusion -->
+    <div id="slide6" class="slide">
+        <div class="slide-container">
+            <h2>Conclusion & Summary</h2>
+            <div class="text-left w-full max-w-2xl mx-auto space-y-6">
+                <p>After evaluating four different classification models, we can draw the following conclusions:</p>
+                <ul class="list-disc list-inside space-y-3">
+                    <li>The <strong>KNN</strong> model achieved the highest final test accuracy at <strong>97.89%</strong>, making it the top-performing model in this comparison.</li>
+                    <li>The <strong>Random Forest</strong> model also showed very strong performance with a high cross-validation score (<strong>97.52%</strong>) and test accuracy (<strong>97.34%</strong>).</li>
+                    <li>All models demonstrated perfect precision and recall for the 'Mixture' and 'Smoke' classes, indicating they can identify these gases with very high confidence.</li>
+                    <li>The <strong>LSTM</strong> model, while still effective, had the lowest accuracy at <strong>95.70%</strong>, with noticeably lower precision and recall for the 'NoGas' and 'Perfume' classes compared to other models.</li>
+                    <li>Overall, for this specific gas detection task, traditional machine learning models like KNN and Random Forest slightly outperformed the deep learning (LSTM) approach.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slide-counter" id="slideCounter">1 / 6</div>
+
+    <div class="nav-buttons">
+        <button id="prevBtn" class="nav-button">Previous</button>
+        <button id="nextBtn" class="nav-button">Next</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const slideCounter = document.getElementById('slideCounter');
+
+        function showSlide(slideNumber) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById(`slide${slideNumber}`).classList.add('active');
+            updateButtons();
+            slideCounter.textContent = `${currentSlide} / ${totalSlides}`;
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides) {
+                nextBtn.click();
+            } else if (e.key === 'ArrowLeft' && currentSlide > 1) {
+                prevBtn.click();
+            }
+        });
+
+        showSlide(currentSlide);
+    </script>
+
+</body>
+</html>
+
