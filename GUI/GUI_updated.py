@@ -17,7 +17,7 @@ import threading
 import queue
 import time
 
-ESP32_IP = "192.168.1.123"
+ESP32_IP = "10.69.186.93"
 ESP32_PORT = 8080
 
 
