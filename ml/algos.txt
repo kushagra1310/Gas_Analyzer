@@ -11,6 +11,13 @@ https://pubmed.ncbi.nlm.nih.gov/39338648/
 https://www.iieta.org/journals/i2m/paper/10.18280/i2m.230405
 https://www.sciencedirect.com/science/article/pii/S0924424724005041
 https://pmc.ncbi.nlm.nih.gov/articles/PMC8309760/
+http://medium.com/@haranobuhardo/traditional-ml-implementation-for-gas-detection-classification-200de8e32bf7
+https://pmc.ncbi.nlm.nih.gov/articles/PMC6749282/
+https://www.sciencedirect.com/science/article/abs/pii/S0921510717303574
+https://jusst.org/wp-content/uploads/2021/06/MACHINE-LEARNING-ALGORITHMS-FOR-CLASSIFICATION-OF-GAS-SENSOR-ARRAY-DATASET.pdf
+http://researchgate.net/publication/383612424_Optimized_Deep_Learning_for_Gas_Sensor
+https://thesai.org/Downloads/Volume4No11/Paper_5-Performance_Comparison_between_Na%C3%AFve_Bayes.pdf
+
 
 
 DataSet:
