@@ -21,8 +21,7 @@ void setup() {
 
   // --- Initialize LoRa ---
   LoRa.setPins(LORA_NSS, LORA_RST, LORA_DIO0);
-  // Set your LoRa frequency. 868E6 for Europe, 915E6 for Americas, 433E6 for Asia.
-  if (!LoRa.begin(433E6)) {
+  if (!LoRa.begin(865E6)) {
     Serial.println("Starting LoRa failed!");
     while (1);
   }
@@ -47,6 +46,28 @@ void loop() {
   Serial.println(dataPacket);
 
   counter++;
+  // get the prediction form ml model
+  Serial.println("Waiting for prediction...");
+  long startTime = millis();
+  bool replyReceived = false;
 
-  delay(500); // Send data every 5 seconds
+  while (millis() - startTime < 500) { // Wait for 0.5 seconds
+    int packetSize = LoRa.parsePacket();
+    if (packetSize) {
+      String reply = "";
+      while (LoRa.available()) {
+        reply += (char)LoRa.read();
+      }
+      Serial.print("Prediction received: ");
+      Serial.println(reply);
+      replyReceived = true;
+      break; // Exit the while loop
+    }
+  }
+
+  if (!replyReceived) {
+    Serial.println("No reply received, timeout.");
+  }
+
+  delay(500); // Send data every 0.5 seconds
 }
