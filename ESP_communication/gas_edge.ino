@@ -31,7 +31,7 @@ void loop() {
   // --- Read Sensor Values ---
   // We'll send the raw ADC values (0-4095 for ESP32)
   int mq135_value = analogRead(MQ135_PIN);
-  int mq_value = analogRead(MQ136_PIN);
+  int mq136_value = analogRead(MQ136_PIN);
   int mq137_value = analogRead(MQ137_PIN);
 
   // --- Create Data Packet ---
@@ -71,4 +71,5 @@ void loop() {
   }
 
   delay(500); // Send data every 0.5 seconds
+
 }
