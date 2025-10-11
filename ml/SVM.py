@@ -11,7 +11,7 @@ import seaborn as sns
 df = pd.read_csv('Gas_Sensors_Measurements.csv')
 
 # Prepare features and labels
-X = df[['MQ2', 'MQ3', 'MQ5', 'MQ6', 'MQ7', 'MQ8', 'MQ135']].values
+X = df[['MQ135', 'MQ136', 'MQ137']].values
 y = df['Gas'].values
 
 # Encode labels

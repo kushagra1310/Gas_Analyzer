@@ -6,12 +6,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
 
 # Load dataset
 df = pd.read_csv('Gas_Sensors_Measurements.csv')
 
 # Prepare features and labels
-X = df[['MQ2', 'MQ3', 'MQ5', 'MQ6', 'MQ7', 'MQ8', 'MQ135']].values
+X = df[['MQ135', 'MQ136', 'MQ137']].values
 y = df['Gas'].values
 
 # Encode labels
@@ -86,6 +87,18 @@ plt.tight_layout()
 plt.savefig('knn_k_values.png', dpi=300, bbox_inches='tight')
 plt.close()
 
+
+# --- NEW: Save the trained model and the scaler ---
+# It's crucial to save the scaler to process new, unseen data the same way as the training data
+joblib.dump(best_knn, 'knn.pkl')
+joblib.dump(scaler, 'scaler.pkl')
+joblib.dump(label_encoder, 'label_encoder.pkl') # Also save the label encoder to decode predictions
+
+print(f'\n✅ Model saved as knn.pkl')
+print(f'✅ Scaler saved as scaler.pkl')
+print(f'✅ Label Encoder saved as label_encoder.pkl')
+# --- End of new section ---
+
+
 print(f'\nKNN model training completed!')
 print(f'Final Test Accuracy: {accuracy*100:.2f}%')
-

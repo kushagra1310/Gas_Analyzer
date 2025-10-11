@@ -9,10 +9,10 @@
 
 // --- Sensor Pin Definitions ---
 #define MQ135_PIN   34  // ADC pin for MQ-135
-#define MQ7_PIN     35  // ADC pin for MQ-7
+#define MQ136_PIN   35  // ADC pin for MQ-136 change to 136
+#define MQ137_PIN   36  // ADC pin for MQ-137
 
 int counter = 0;
-
 void setup() {
   Serial.begin(115200);
   while (!Serial);
@@ -31,11 +31,12 @@ void loop() {
   // --- Read Sensor Values ---
   // We'll send the raw ADC values (0-4095 for ESP32)
   int mq135_value = analogRead(MQ135_PIN);
-  int mq7_value = analogRead(MQ7_PIN);
+  int mq_value = analogRead(MQ136_PIN);
+  int mq137_value = analogRead(MQ137_PIN);
 
   // --- Create Data Packet ---
-  // Format: "MQ135_VALUE,MQ7_VALUE,PACKET_COUNT"
-  String dataPacket = String(mq135_value) + "," + String(mq7_value) + "," + String(counter);
+  // Format: "MQ135_VALUE,MQ136_VALUE,MQ137_VALUE,PACKET_COUNT"
+  String dataPacket = String(mq135_value) + "," + String(mq136_value) + ","+String(mq137_value) + "," + String(counter);
 
   // --- Send LoRa Packet ---
   LoRa.beginPacket();

@@ -20,21 +20,22 @@ except FileNotFoundError:
 def predict():
     # Get sensor data from the request's query parameters
     mq135 = request.args.get('mq135', type=float)
-    mq7 = request.args.get('mq7', type=float)
+    mq136 = request.args.get('mq136', type=float)
+    mq137 = request.args.get('mq137', type=float)
 
-    if mq135 is None or mq7 is None:
+    if mq135 is None or mq136 is None or mq137 is None:
         return "Error: Missing sensor data. Please provide 'mq135' and 'mq7'.", 400
 
     if model:
         # Prepare the data for the model (needs to be in a 2D array)
-        features = np.array([[mq135, mq7]])
+        features = np.array([[mq135, mq136, mq137]])
         
         # Get the prediction index from the model
         prediction_index = model.predict(features)[0]
         
         # Map the index to the class name
         prediction_text = class_names[prediction_index]
-        print(f"Received: [MQ135: {mq135}, MQ7: {mq7}] -> Predicted: {prediction_text}")
+        print(f"Received: [MQ135: {mq135}, MQ136: {mq136},  MQ137: {mq137}] -> Predicted: {prediction_text}")
         
     else:
         # Fallback for when the model file is not found

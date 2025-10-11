@@ -15,13 +15,14 @@ import seaborn as sns
 df = pd.read_csv('Gas_Sensors_Measurements.csv')
 
 # Prepare features and labels
-X = df[['MQ2', 'MQ3', 'MQ5', 'MQ6', 'MQ7', 'MQ8', 'MQ135']].values
+X = df[['MQ135', 'MQ136', 'MQ137']].values
 y = df['Gas'].values
 
 # Encode labels
 label_encoder = LabelEncoder()
 y_encoded = label_encoder.fit_transform(y)
-y_categorical = to_categorical(y_encoded)
+num_classes = len(label_encoder.classes_)
+y_categorical = to_categorical(y_encoded, num_classes=num_classes)
 
 # Split dataset
 X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=0.2, random_state=42, stratify=y_encoded)

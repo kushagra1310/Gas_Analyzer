@@ -1,16 +1,14 @@
 #include <SPI.h>
 #include <LoRa.h>
 #include <WiFi.h>
-#include <HTTPClient.h> // --- NEW: Library for making HTTP requests ---
+#include <HTTPClient.h>
 
-// --- Wi-Fi Credentials ---
 const char* ssid = "Nothing Phone (2)";
 const char* password = "12345678";
 WiFiServer server(8080); // Create a server on port 8080
 
-// --- NEW: URL of your Python KNN Model Server ---
 // IMPORTANT: Replace <ip> with the actual local IP of the PC running the Python script
-const char* knnServerUrl = "http://127.0.0.1:5000/predict";
+const char* knnServerUrl = "http://<IP>:5000/predict";
 
 // --- LoRa Pin Definitions ---
 #define LORA_NSS    5
@@ -20,13 +18,12 @@ const char* knnServerUrl = "http://127.0.0.1:5000/predict";
 // Store last received LoRa data
 String loraDataFromTransmitter = "No data yet";
 
-// --- NEW: Function to get prediction from KNN Model Server ---
-String getModelPrediction(float mq135, float mq7) {
+String getModelPrediction(float mq135, float mq136, float mq137) {
   HTTPClient http;
   String prediction = "Prediction Error"; // Default error message
 
   // Create the full URL with query parameters
-  String requestUrl = String(knnServerUrl) + "?mq135=" + String(mq135, 2) + "&mq7=" + String(mq7, 2);
+  String requestUrl = String(knnServerUrl) + "?mq135=" + String(mq135, 2) + "&mq136=" + String(mq136, 2)+"&mq137=" + String(mq137, 2);
   
   Serial.print("Making request to: ");
   Serial.println(requestUrl);
@@ -101,19 +98,34 @@ void loop() {
   WiFiClient client = server.available();
   if (client) {
     Serial.println("🌐 Client connected.");
-
-    // Parse data: expecting "MQ135,MQ7"
+    
+    // Parse data: expecting "MQ135,MQ136"
     int firstComma = loraDataFromTransmitter.indexOf(',');
-    if (firstComma != -1) {
+    int secondComma = loraDataFromTransmitter.indexOf(',', firstComma + 1);
+    if (firstComma != -1 && secondComma != -1) {
       String mq135_val = loraDataFromTransmitter.substring(0, firstComma);
-      String mq7_val = loraDataFromTransmitter.substring(firstComma + 1);
+      String mq136_val = loraDataFromTransmitter.substring(firstComma + 1);
+      String mq137_val = loraDataFromTransmitter.substring(secondComma + 1);
       
-      float mq135_ppm = mq135_val.toFloat();
-      float mq7_ppm = mq7_val.toFloat();
+      float mq135_res = mq135_val.toFloat();
+      float mq136_res = mq136_val.toFloat();
+      float mq137_res = mq137_val.toFloat();
+      
+      // --- Get prediction from the model ---
+      String prediction = getModelPrediction(mq135_res, mq136_res, mq137_res);
+      Serial.print("Model Prediction: ");
+      Serial.println(prediction);
+      Serial.println("Sending prediction back via LoRa...");
+      LoRa.beginPacket();
+      LoRa.print(prediction);
+      LoRa.endPacket();
+      Serial.println("✅ LoRa packet sent.");
       
       // Send response
-      client.printf("MQ-135,%.2f\n", mq135_ppm);
-      client.printf("MQ-7,%.2f\n", mq7_ppm);
+      client.printf("MQ-135,%.2f\n", mq135_res);
+      client.printf("MQ-136,%.2f\n", mq136_res);
+      client.printf("MQ-137,%.2f\n", mq137_res);
+      client.printf("Prediction,%s\n", prediction);
     } else {
       // If no valid LoRa data yet
       client.println("No valid LoRa data received yet.");
@@ -122,14 +134,5 @@ void loop() {
     client.stop();
     Serial.println("🌐 Client disconnected.");
 
-    // --- NEW: Get prediction from the model ---
-    String prediction = getModelPrediction(mq135_ppm, mq7_ppm);
-    Serial.print("Model Prediction: ");
-    Serial.println(prediction);
-    Serial.println("Sending prediction back via LoRa...");
-    LoRa.beginPacket();
-    LoRa.print(prediction);
-    LoRa.endPacket();
-    Serial.println("✅ LoRa packet sent.");
   }
 }

@@ -22,13 +22,12 @@ ESP32_PORT = 8080
 
 
 # --- Thresholds and Icons ---
-THRESHOLDS = {'MQ-7': 200, 'MQ-2': 250}
-SENSOR_ICONS = {'MQ-2': '🔥', 'MQ-7': '💨', 'MQ-135': '🌿', 'MQ-136': '🧪', 'MQ-137': '🛡️'}
+THRESHOLDS = {'MQ-136': 200, 'MQ-3': 250}
+SENSOR_ICONS = {'MQ-3': '🔥', 'MQ-135': '🌿', 'MQ-136': '💨', 'MQ-137': '🛡️'}
 
 # --- Sensor Data Simulation ---
 SENSORS = {
-    "MQ-2": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
-    "MQ-7": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
+    "MQ-3": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
     "MQ-135": {"status": "Off", "unit": "PPM", "start_time": None},
     "MQ-136": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
     "MQ-137": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
@@ -234,6 +233,52 @@ class SensorCard(tk.Frame):
         self.sparkline_label.image = sparkline_img
         self.draw_border()
 
+# --- NEW Prediction Card Widget ---
+class PredictionCard(tk.Frame):
+    """
+    A dedicated card-style frame to display the ML model's prediction.
+    """
+    def __init__(self, master, height=60, **kwargs):
+        super().__init__(master, height=height, **kwargs)
+        
+        # Canvas for background and text
+        self.card_canvas = tk.Canvas(self, bd=0, highlightthickness=0, bg="#2c504e", height=height)
+        self.card_canvas.pack(fill="both", expand=True)
+        self.config(height=height)
+        self.pack_propagate(False)
+
+        # Title and prediction text drawn directly on the canvas
+        self.title_text_id = self.card_canvas.create_text(
+            0, height//2, anchor="w", font=("Orbitron", 18, "bold"), 
+            fill="#00eaff", text="🔮 ML PREDICTION"
+        )
+        self.prediction_text_id = self.card_canvas.create_text(
+            0, height//2, anchor="e", font=("Orbitron", 22, "bold"), 
+            fill="#ff9800", text="--"
+        )
+
+        self.card_canvas.bind("<Configure>", self.align_text)
+        self.draw_border()
+
+    def align_text(self, event=None):
+        w = self.winfo_width()
+        h = self.winfo_height()
+        # Align title to the left and prediction to the right
+        self.card_canvas.coords(self.title_text_id, int(w * 0.05), h // 2)
+        self.card_canvas.coords(self.prediction_text_id, int(w * 0.95), h // 2)
+
+    def draw_border(self):
+        """Draw a border on the canvas."""
+        self.card_canvas.delete("border")
+        self.card_canvas.create_rectangle(
+            0, 0, self.winfo_width(), self.winfo_height(),
+            outline="#ff9800", width=2, tags="border"
+        )
+        
+    def update_prediction(self, prediction_text):
+        """Update the prediction text on the canvas."""
+        self.card_canvas.itemconfig(self.prediction_text_id, text=prediction_text)
+
 
 # NEW PART
 def network_client_thread(data_queue, status_queue):
@@ -290,6 +335,7 @@ class GasAnalyzerApp:
 
         self.create_header()
         self.sensor_cards = {}
+        self.prediction_card = None
         self.create_sensor_table()
 
         self.status_var = tk.StringVar(value="Initializing...")
@@ -353,9 +399,14 @@ class GasAnalyzerApp:
             card.pack_propagate(False)
             self.cards_frame.grid_rowconfigure(idx, weight=0)
             self.sensor_cards[name] = card
+
+        # Create and place the dedicated prediction card below all sensors
+        self.prediction_card = PredictionCard(self.cards_frame, height=60)
+        self.prediction_card.grid(row=len(SENSORS), column=0, sticky="ew", pady=(15, 5)) # Add extra top padding
+
         self.cards_frame.grid_columnconfigure(0, weight=1)
 
-    # --- MODIFICATION START: Renamed and rewritten update loop ---
+    # ---Renamed and rewritten update loop ---
     def update_gui(self):
         """
         Processes messages from the network thread's queue to update the GUI.
@@ -363,7 +414,7 @@ class GasAnalyzerApp:
         # Process all pending messages in the data queue
         while not self.data_queue.empty():
             try:
-                # Expected format: "SENSOR_NAME,VALUE" e.g., "MQ-7,185.34"
+                # Expected format: "SENSOR_NAME,VALUE" e.g., "MQ-136,185.34"
                 message = self.data_queue.get_nowait()
                 
                 parts = message.split(',')
@@ -373,8 +424,10 @@ class GasAnalyzerApp:
 
                 name, value_str = parts
                 new_reading = float(value_str)
-                
-                if name in self.sensor_cards:
+                if name == "prediction":
+                    if self.prediction_card:
+                        self.prediction_card.update_prediction(value_str.upper())
+                elif name in self.sensor_cards:
                     # Update sensor's historical data
                     sensor_historical_data[name].pop(0)
                     sensor_historical_data[name].append(new_reading)
@@ -408,7 +461,6 @@ class GasAnalyzerApp:
 
         # Schedule the next check
         self.root.after(100, self.update_gui)
-    # --- MODIFICATION END ---
     
     def open_detail_window(self, sensor_name):
         detail_window = tk.Toplevel(self.root)

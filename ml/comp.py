@@ -19,7 +19,7 @@ from tensorflow.keras.utils import to_categorical
 df = pd.read_csv('Gas_Sensors_Measurements.csv')
 
 # Prepare features and labels
-feature_names = ['MQ2', 'MQ3', 'MQ5', 'MQ6', 'MQ7', 'MQ8', 'MQ135']
+feature_names = ['MQ135', 'MQ136', 'MQ137']
 X = df[feature_names].values
 y = df['Gas'].values
 
