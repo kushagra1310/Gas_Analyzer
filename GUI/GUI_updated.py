@@ -27,10 +27,10 @@ SENSOR_ICONS = {'MQ-3': '🔥', 'MQ-135': '🌿', 'MQ-136': '💨', 'MQ-137': '�
 
 # --- Sensor Data Simulation ---
 SENSORS = {
-    "MQ-3": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
+    "MQ-3": {"status": "On", "unit": "PPM", "start_time":None},
     "MQ-135": {"status": "Off", "unit": "PPM", "start_time": None},
-    "MQ-136": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
-    "MQ-137": {"status": "On", "unit": "PPM", "start_time": datetime.now() - timedelta(hours=random.randint(1, 5))},
+    "MQ-136": {"status": "On", "unit": "PPM", "start_time": None},
+    "MQ-137": {"status": "On", "unit": "PPM", "start_time": None},
 }
 sensor_historical_data = {name: [0 for _ in range(50)] for name in SENSORS}
 
@@ -297,7 +297,7 @@ def network_client_thread(data_queue, status_queue):
                 buffer = ""
                 while True:
                     # Receive data in chunks
-                    data = s.recv(128).decode('utf-8')
+                    data = s.recv(128).decode('utf-8', errors='ignore')
                     if not data:
                         break # Connection closed
                     
@@ -414,7 +414,7 @@ class GasAnalyzerApp:
         # Process all pending messages in the data queue
         while not self.data_queue.empty():
             try:
-                # Expected format: "SENSOR_NAME,VALUE" e.g., "MQ-136,185.34"
+                # Expected format: "SENSOR_NAME,VALUE" or "prediction,GAS_NAME"
                 message = self.data_queue.get_nowait()
                 
                 parts = message.split(',')
@@ -422,12 +422,17 @@ class GasAnalyzerApp:
                     print(f"Malformed data received: {message}")
                     continue
 
-                name, value_str = parts
-                new_reading = float(value_str)
+                name, value_str = parts[0].strip(), parts[1].strip()
+
+                # --- FIX IS HERE: Check for prediction FIRST ---
                 if name == "prediction":
                     if self.prediction_card:
                         self.prediction_card.update_prediction(value_str.upper())
+
                 elif name in self.sensor_cards:
+                    # <-- FIX: Convert to float only if it's a sensor message
+                    new_reading = float(value_str) 
+                    
                     # Update sensor's historical data
                     sensor_historical_data[name].pop(0)
                     sensor_historical_data[name].append(new_reading)
@@ -449,6 +454,7 @@ class GasAnalyzerApp:
             except queue.Empty:
                 pass # No more messages
             except (ValueError, IndexError) as e:
+                # This will now correctly catch errors only for sensor messages
                 print(f"Error processing data '{message}': {e}")
                 
         # Update the status bar from the status queue
