@@ -5,16 +5,16 @@ import numpy as np
 # Initialize the Flask application
 app = Flask(__name__)
 
-# Load your pre-trained KNN model
-# Make sure 'knn_model.pkl' is in the same directory as this script
+# Load your pre-trained ML model
+# Make sure 'model.pkl' is in the same directory as this script
 try:
-    model = joblib.load('knn_m.pkl')
+    model = joblib.load('svm_model.pkl')
     # Example class names, adjust as needed for your model
     class_names = ['Safe', 'Moderate', 'High Risk'] 
     print("✅ Model loaded successfully!")
 except FileNotFoundError:
     model = None
-    print("❌ Error: 'knn.pkl' not found. Predictions will be simulated.")
+    print("❌ Error: 'svm_model.pkl' not found. Predictions will be simulated.")
 
 @app.route('/predict', methods=['GET'])
 def predict():
@@ -24,7 +24,7 @@ def predict():
     mq137 = request.args.get('mq137', type=float)
 
     if mq135 is None or mq136 is None or mq137 is None:
-        return "Error: Missing sensor data. Please provide 'mq135' and 'mq7'.", 400
+        return "Error: Missing sensor data. Please provide 'mq135', 'mq136' and 'mq137'.", 400
 
     if model:
         # Prepare the data for the model (needs to be in a 2D array)
