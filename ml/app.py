@@ -10,7 +10,6 @@ app = Flask(__name__)
 try:
     model = joblib.load('svm_model.pkl')
     # Example class names, adjust as needed for your model
-    class_names = ['Safe', 'Moderate', 'High Risk'] 
     print("✅ Model loaded successfully!")
 except FileNotFoundError:
     model = None
@@ -31,10 +30,8 @@ def predict():
         features = np.array([[mq135, mq136, mq137]])
         
         # Get the prediction index from the model
-        prediction_index = model.predict(features)[0]
+        prediction_text = model.predict(features)[0]
         
-        # Map the index to the class name
-        prediction_text = class_names[prediction_index]
         print(f"Received: [MQ135: {mq135}, MQ136: {mq136},  MQ137: {mq137}] -> Predicted: {prediction_text}")
         
     else:
