@@ -8,7 +8,7 @@ const char* password = "12345678";
 WiFiServer server(8080); // Create a server on port 8080
 
 // IMPORTANT: Replace <ip> with the actual local IP of the PC running the Python script
-const char* knnServerUrl = "http://<IP>:5000/predict";
+const char* knnServerUrl = "http://10.2.135.151:5000/predict";
 
 // --- LoRa Pin Definitions ---
 #define LORA_NSS    5
@@ -99,13 +99,14 @@ void loop() {
   if (client) {
     Serial.println("🌐 Client connected.");
     
-    // Parse data: expecting "MQ135,MQ136"
+    // Parse data: expecting "MQ135,MQ136,MQ137"
     int firstComma = loraDataFromTransmitter.indexOf(',');
     int secondComma = loraDataFromTransmitter.indexOf(',', firstComma + 1);
+    int thirdComma = received.indexOf(',', secondComma + 1);
     if (firstComma != -1 && secondComma != -1) {
       String mq135_val = loraDataFromTransmitter.substring(0, firstComma);
-      String mq136_val = loraDataFromTransmitter.substring(firstComma + 1);
-      String mq137_val = loraDataFromTransmitter.substring(secondComma + 1);
+      String mq136_val = loraDataFromTransmitter.substring(firstComma + 1, secondComma);
+      String mq137_val = loraDataFromTransmitter.substring(secondComma + 1, thirdComma);
       
       float mq135_res = mq135_val.toFloat();
       float mq136_res = mq136_val.toFloat();

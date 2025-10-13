@@ -27,9 +27,9 @@ void setup() {
 
 void loop() {
   // --- Generate Random Sensor Values ---
-  int mq135_value = random(300, 1500);  // Simulated value
-  int mq136_value = random(300, 1500);  // Simulated value
-  int mq137_value = random(300, 1500);  // Simulated value
+  float mq135_value = random(0, 10001) / 10000.0;  // Simulated value
+  float mq136_value = random(0, 10001) / 10000.0;  // Simulated value
+  float mq137_value = random(0, 10001) / 10000.0;  // Simulated value
 
   // --- Create Data Packet ---
   String dataPacket = String(mq135_value) + "," + 

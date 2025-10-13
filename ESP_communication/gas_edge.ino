@@ -52,7 +52,7 @@ void loop() {
   long startTime = millis();
   bool replyReceived = false;
 
-  while (millis() - startTime < 500) { // Wait for 0.5 seconds
+  while (millis() - startTime < 5000) { // Wait for 5 seconds
     int packetSize = LoRa.parsePacket();
     if (packetSize) {
       String reply = "";
@@ -70,6 +70,6 @@ void loop() {
     Serial.println("No reply received, timeout.");
   }
 
-  delay(500); // Send data every 0.5 seconds
+  delay(5000); // Send data every 0.5 seconds
 
 }

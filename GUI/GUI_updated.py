@@ -21,16 +21,15 @@ ESP32_IP = "10.69.186.93"
 ESP32_PORT = 8080
 
 
-# --- Thresholds and Icons ---
-THRESHOLDS = {'MQ-136': 200, 'MQ-3': 250}
-SENSOR_ICONS = {'MQ-3': '🔥', 'MQ-135': '🌿', 'MQ-136': '💨', 'MQ-137': '🛡️'}
+# --- Thresholds ---
+THRESHOLDS = {'MQ-3': 0.5, "MQ-135":0.5, 'MQ-136': 0.5, "MQ-137": 0.5}
 
 # --- Sensor Data Simulation ---
 SENSORS = {
-    "MQ-3": {"status": "On", "unit": "PPM", "start_time":None},
-    "MQ-135": {"status": "Off", "unit": "PPM", "start_time": None},
-    "MQ-136": {"status": "On", "unit": "PPM", "start_time": None},
-    "MQ-137": {"status": "On", "unit": "PPM", "start_time": None},
+    "MQ-3": {"status": "On", "unit": "Rs/R0", "start_time":None},
+    "MQ-135": {"status": "Off", "unit": "Rs/R0", "start_time": None},
+    "MQ-136": {"status": "On", "unit": "Rs/R0", "start_time": None},
+    "MQ-137": {"status": "On", "unit": "Rs/R0", "start_time": None}
 }
 sensor_historical_data = {name: [0 for _ in range(50)] for name in SENSORS}
 
@@ -133,7 +132,7 @@ class GradientCanvas(tk.Canvas):
 class SensorCard(tk.Frame):
     """
     Card-style frame that draws sensor info directly onto a canvas for a clean look.
-    Adds: threshold color alerts, sensor icons, sparkline graphs.
+    Adds: threshold color alerts, sparkline graphs.
     """
     def __init__(self, master, sensor_name, on_click, height=60, **kwargs):
         super().__init__(master, height=height, **kwargs)
@@ -149,9 +148,7 @@ class SensorCard(tk.Frame):
         self.config(height=height)
         self.pack_propagate(False)
 
-        # Sensor icon
-        icon = SENSOR_ICONS.get(sensor_name, "")
-        display_name = f"{icon} {sensor_name}" if icon else sensor_name
+        display_name = f"{sensor_name}"
 
         # --- Adjusted positions for perfect column alignment ---
         self.name_text_id = self.card_canvas.create_text(
@@ -250,11 +247,11 @@ class PredictionCard(tk.Frame):
         # Title and prediction text drawn directly on the canvas
         self.title_text_id = self.card_canvas.create_text(
             0, height//2, anchor="w", font=("Orbitron", 18, "bold"), 
-            fill="#00eaff", text="🔮 ML PREDICTION"
+            fill="#00eaff", text="PREDICTION"
         )
         self.prediction_text_id = self.card_canvas.create_text(
             0, height//2, anchor="e", font=("Orbitron", 22, "bold"), 
-            fill="#ff9800", text="--"
+            fill="#00ff00", text="--"
         )
 
         self.card_canvas.bind("<Configure>", self.align_text)
@@ -425,7 +422,7 @@ class GasAnalyzerApp:
                 name, value_str = parts[0].strip(), parts[1].strip()
 
                 # --- FIX IS HERE: Check for prediction FIRST ---
-                if name == "prediction":
+                if name == "Prediction":
                     if self.prediction_card:
                         self.prediction_card.update_prediction(value_str.upper())
 
@@ -442,7 +439,7 @@ class GasAnalyzerApp:
                     details = SENSORS[name]
                     
                     threshold = THRESHOLDS.get(name)
-                    data_color = '#FF9900' if (threshold and new_reading > threshold) else '#ffffff'
+                    data_color = '#FF9900' if (threshold and new_reading < threshold) else '#ffffff'
                     
                     spark_img = create_sparkline(sensor_historical_data[name], width=80, height=28)
                     
@@ -526,7 +523,7 @@ class GasAnalyzerApp:
             except Exception:
                 latest_value = None
 
-            if threshold and latest_value and latest_value > threshold:
+            if threshold and latest_value and latest_value < threshold:
                 current_reading_label.config(fg="#FF9900")
             else:
                 current_reading_label.config(fg="#00ff99")
@@ -545,9 +542,9 @@ class GasAnalyzerApp:
             plot.plot(
                 sensor_historical_data[sensor_name], color="#00eaff", linewidth=2,
                 marker='o', markersize=4, markerfacecolor='#232946', markeredgecolor='#00eaff',
-                label=f"{sensor_name} Reading (PPM)"
+                label=f"{sensor_name} Reading (Rs/R0)"
             )
-            plot.set_title(f"{sensor_name} Reading (PPM)", color="#00eaff", fontsize=16, pad=24)
+            plot.set_title(f"{sensor_name} Reading (Rs/R0)", color="#00eaff", fontsize=16, pad=24)
             plot.set_facecolor("#232946")
             plot.tick_params(axis='x', colors='#bdc3c7')
             plot.tick_params(axis='y', colors='#bdc3c7')
