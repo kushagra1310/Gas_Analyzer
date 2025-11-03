@@ -421,13 +421,11 @@ class GasAnalyzerApp:
 
                 name, value_str = parts[0].strip(), parts[1].strip()
 
-                # --- FIX IS HERE: Check for prediction FIRST ---
                 if name == "Prediction":
                     if self.prediction_card:
                         self.prediction_card.update_prediction(value_str.upper())
 
                 elif name in self.sensor_cards:
-                    # <-- FIX: Convert to float only if it's a sensor message
                     new_reading = float(value_str) 
                     
                     # Update sensor's historical data
@@ -494,11 +492,11 @@ class GasAnalyzerApp:
         current_reading_label.pack(pady=(10,0), expand=True)
         tk.Label(current_card, text="CURRENT READING", font=("Orbitron", 14), fg="#bdc3c7", bg="#232946").pack(pady=(0,10), expand=True)
 
-        since_var = tk.StringVar()
-        since_card = tk.Frame(top_info_frame, bg="#232946")
-        since_card.pack(side="right", expand=True, padx=10, fill="y")
-        tk.Label(since_card, textvariable=since_var, font=("Orbitron", 26, "bold"), fg="#00eaff", bg="#232946").pack(pady=(10,0), expand=True)
-        tk.Label(since_card, text="ACTIVE SINCE", font=("Orbitron", 14), fg="#bdc3c7", bg="#232946").pack(pady=(0,10), expand=True)
+        # since_var = tk.StringVar()
+        # since_card = tk.Frame(top_info_frame, bg="#232946")
+        # since_card.pack(side="right", expand=True, padx=10, fill="y")
+        # tk.Label(since_card, textvariable=since_var, font=("Orbitron", 26, "bold"), fg="#00eaff", bg="#232946").pack(pady=(10,0), expand=True)
+        # tk.Label(since_card, text="ACTIVE", font=("Orbitron", 14), fg="#bdc3c7", bg="#232946").pack(pady=(0,10), expand=True)
 
         # Increased graph frame and figure size
         graph_frame = tk.Frame(detail_window, bg="#232946")
@@ -532,9 +530,9 @@ class GasAnalyzerApp:
                 delta = datetime.now() - sensor_details["start_time"]
                 hours, rem = divmod(delta.total_seconds(), 3600)
                 mins = (rem % 3600) // 60
-                since_var.set(f"{int(hours)}h {int(mins)}m")
-            else:
-                since_var.set("OFFLINE")
+                # since_var.set(f"{int(hours)}h {int(mins)}m")
+            # else:
+                # since_var.set("ONLINE")
             
             plot.clear()
             if threshold:
