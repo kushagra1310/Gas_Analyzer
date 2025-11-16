@@ -17,19 +17,19 @@ import threading
 import queue
 import time
 
-ESP32_IP = "10.69.186.93"
+ESP32_IP = "10.77.54.93"
 ESP32_PORT = 8080
 
 
 # --- Thresholds ---
-THRESHOLDS = {'MQ-3': 0.5, "MQ-135":0.5, 'MQ-136': 0.5, "MQ-137": 0.5}
+THRESHOLDS = {'MQ-3': 0.5, 'MQ-136': 0.5, "MQ-137": 0.5}
+# THRESHOLDS = {'MQ-3': 0.5, 'MQ-136': 0.5, "MQ-137": 0.5, "MHZ19": 800}
 
-# --- Sensor Data Simulation ---
 SENSORS = {
     "MQ-3": {"status": "On", "unit": "Rs/R0", "start_time":None},
-    "MQ-135": {"status": "Off", "unit": "Rs/R0", "start_time": None},
     "MQ-136": {"status": "On", "unit": "Rs/R0", "start_time": None},
-    "MQ-137": {"status": "On", "unit": "Rs/R0", "start_time": None}
+    "MQ-137": {"status": "On", "unit": "Rs/R0", "start_time": None},
+    # "MHZ19": {"status": "On", "unit": "ppm", "start_time": None}
 }
 sensor_historical_data = {name: [0 for _ in range(50)] for name in SENSORS}
 
@@ -342,7 +342,6 @@ class GasAnalyzerApp:
         )
         self.status_bar.pack(side="bottom", fill="x", pady=5)
 
-        # --- MODIFICATION START: Create queue and start network thread ---
         self.data_queue = queue.Queue()
         self.status_queue = queue.Queue()
 
@@ -354,7 +353,6 @@ class GasAnalyzerApp:
         self.network_thread.start()
 
         self.update_gui()
-        # --- MODIFICATION END ---
 
     def create_header(self):
         header_container = tk.Frame(self.main_frame, bg="#232946")
@@ -403,7 +401,6 @@ class GasAnalyzerApp:
 
         self.cards_frame.grid_columnconfigure(0, weight=1)
 
-    # ---Renamed and rewritten update loop ---
     def update_gui(self):
         """
         Processes messages from the network thread's queue to update the GUI.
