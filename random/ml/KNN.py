@@ -9,10 +9,10 @@ import seaborn as sns
 import joblib
 
 # Load dataset
-df = pd.read_csv('Gas_Sensors_Measurements.csv')
+df = pd.read_excel('Dataset.xlsx')
 
 # Prepare features and labels
-X = df[['MQ135', 'MQ136', 'MQ137']].values
+X = df[['MQ-3', 'MQ-136', 'MQ-137']].values
 y = df['Gas'].values
 
 # Encode labels

@@ -1,0 +1,103 @@
+
+#include <Arduino.h>
+
+// ---------- Sensor Pins ----------
+#define MQ136_PIN 27
+#define MQ3_PIN 33
+#define MQ137_PIN 12
+
+// ---------- Constants ----------
+const int CALIBRATION_SAMPLES = 250;   // number of readings for Ro calibration
+const int SAMPLE_INTERVAL = 1000;      // 1 second between readings
+const float RL = 10.0;                 // Load resistor in kΩ (your external resistor)
+const float ADC_MAX = 4095.0;          // 12-bit ADC (0–4095)
+const float VREF = 3.3;                // ESP32 ADC reference voltage (3.3 V)
+
+// ---------- Global Variables ----------
+float Ro136 = 0.0, Ro135 = 0.0, Ro137 = 0.0;
+bool calibrated = false;
+
+// ---------- Helper Functions ----------
+float readSensorVoltage(int pin) {
+  int adcValue = analogRead(pin);
+  return (adcValue * VREF / ADC_MAX);
+}
+
+float calculateRs(float vOut) {
+  if (vOut <= 0.0) return -1.0;
+  return RL * (VREF - vOut) / vOut;  // Rs = RL * (Vc - Vout) / Vout
+}
+
+// ---------- Setup ----------
+void setup() {
+  Serial.begin(115200);
+  analogReadResolution(12);
+
+  Serial.println("======================================================");
+  Serial.println("   MQ-136 / MQ-135 / MQ-137 CALIBRATION (ESP32)   ");
+  Serial.println("   Divider: AO-->ADC pin, 10 kΩ RL to GND          ");
+  Serial.println("======================================================\n");
+
+  float sum136 = 0, sum135 = 0, sum137 = 0;
+
+  // ---------- Calibration Phase ----------
+  for (int i = 0; i < CALIBRATION_SAMPLES; i++) {
+    float v136 = readSensorVoltage(MQ136_PIN);
+    float v135 = readSensorVoltage(MQ135_PIN);
+    float v137 = readSensorVoltage(MQ137_PIN);
+
+    float Rs136 = calculateRs(v136);
+    float Rs135 = calculateRs(v135);
+    float Rs137 = calculateRs(v137);
+
+    sum136 += Rs136;
+    sum135 += Rs135;
+    sum137 += Rs137;
+
+    Serial.printf("[Sample %3d/%d]\n", i + 1, CALIBRATION_SAMPLES);
+    Serial.printf("  MQ-136 → Vout = %.3f V | Rs = %.3f kΩ\n", v136, Rs136);
+    Serial.printf("  MQ-135 → Vout = %.3f V | Rs = %.3f kΩ\n", v135, Rs135);
+    Serial.printf("  MQ-137 → Vout = %.3f V | Rs = %.3f kΩ\n", v137, Rs137);
+    Serial.println("------------------------------------------------------");
+    delay(SAMPLE_INTERVAL);
+  }
+
+  // ---------- Calculate Average Ro ----------
+  Ro136 = sum136 / CALIBRATION_SAMPLES;
+  Ro135 = sum135 / CALIBRATION_SAMPLES;
+  Ro137 = sum137 / CALIBRATION_SAMPLES;
+  calibrated = true;
+
+  Serial.println("\n✅ Calibration Complete!");
+  Serial.println("======================================================");
+  Serial.printf("  Ro136 (MQ-136) = %.3f kΩ\n", Ro136);
+  Serial.printf("  Ro135 (MQ-135) = %.3f kΩ\n", Ro135);
+  Serial.printf("  Ro137 (MQ-137) = %.3f kΩ\n", Ro137);
+  Serial.println("======================================================\n");
+
+  Serial.println("Now measuring Rs and Rs/Ro every second...\n");
+}
+
+// ---------- Loop (Measurement Phase) ----------
+void loop() {
+  if (!calibrated) return;
+
+  float v136 = readSensorVoltage(MQ136_PIN);
+  float v135 = readSensorVoltage(MQ135_PIN);
+  float v137 = readSensorVoltage(MQ137_PIN);
+
+  float Rs136 = calculateRs(v136);
+  float Rs135 = calculateRs(v135);
+  float Rs137 = calculateRs(v137);
+
+  float ratio136 = Rs136 / Ro136;
+  float ratio135 = Rs135 / Ro135;
+  float ratio137 = Rs137 / Ro137;
+  Serial.printf("%.3f,%.3f,%.3f\n",ratio135,ratio136,ratio137);
+  /*
+    Serial.printf("MQ-7: Vout = %.3f V | Rs = %.3f kΩ | Rs/Ro = %.3f\n", v136, Rs136, ratio136);
+    Serial.printf("MQ-135: Vout = %.3f V | Rs = %.3f kΩ | Rs/Ro = %.3f\n", v135, Rs135, ratio135);
+    Serial.printf("MQ-137: Vout = %.3f V | Rs = %.3f kΩ | Rs/Ro = %.3f\n", v137, Rs137, ratio137);
+  */
+  delay(SAMPLE_INTERVAL);
+}
