@@ -11,8 +11,20 @@ import joblib
 # Load dataset
 df = pd.read_excel('Dataset.xlsx')
 
+# Shuffle the dataset
+df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+
 # Prepare features and labels
-X = df[['MQ-3', 'MQ-136', 'MQ-137']].values
+feature_columns = ['MQ-3', 'MQ-136', 'MQ-137', 'Slope_MQ-3', 'Slope_MQ-136', 'Slope_MQ-137']
+
+try:
+    X = df[feature_columns].values
+    print(f"✅ successfully loaded {len(feature_columns)} features.")
+except KeyError as e:
+    print(f"❌ Error: Column not found in Dataset.xlsx. {e}")
+    print("Please ensure your Excel file has columns for slopes (e.g., 'Slope_MQ-3').")
+    exit()
+
 y = df['Gas'].values
 
 # Encode labels
@@ -22,7 +34,7 @@ y_encoded = label_encoder.fit_transform(y)
 # Split dataset
 X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42, stratify=y_encoded)
 
-# Standardize features (important for KNN)
+# Standardize features (CRITICAL for KNN, especially with mixed units like Value vs Slope)
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
@@ -34,6 +46,7 @@ param_grid = {
     'metric': ['euclidean', 'manhattan', 'minkowski']
 }
 
+print("Starting Grid Search...")
 knn = KNeighborsClassifier()
 grid_search = GridSearchCV(knn, param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
 grid_search.fit(X_train_scaled, y_train)
@@ -88,17 +101,15 @@ plt.savefig('knn_k_values.png', dpi=300, bbox_inches='tight')
 plt.close()
 
 
-# --- NEW: Save the trained model and the scaler ---
-# It's crucial to save the scaler to process new, unseen data the same way as the training data
+# --- Save the trained model and the scaler ---
+# The scaler will now remember the mean/variance of all 6 features
 joblib.dump(best_knn, 'knn.pkl')
-joblib.dump(scaler, 'scaler.pkl')
-joblib.dump(label_encoder, 'label_encoder.pkl') # Also save the label encoder to decode predictions
+joblib.dump(scaler, 'scaler_knn.pkl')
+joblib.dump(label_encoder, 'label_encoder_knn.pkl')
 
 print(f'\n✅ Model saved as knn.pkl')
-print(f'✅ Scaler saved as scaler.pkl')
-print(f'✅ Label Encoder saved as label_encoder.pkl')
-# --- End of new section ---
-
+print(f'✅ Scaler saved as scaler_knn.pkl (Expects 6 inputs now)')
+print(f'✅ Label Encoder saved as label_encoder_knn.pkl')
 
 print(f'\nKNN model training completed!')
 print(f'Final Test Accuracy: {accuracy*100:.2f}%')

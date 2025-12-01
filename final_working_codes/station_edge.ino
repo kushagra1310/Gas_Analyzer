@@ -8,7 +8,7 @@ const char* password = "12345678";
 WiFiServer server(8080); // Create a server on port 8080
 
 // IMPORTANT: Replace <ip> with the actual local IP of the PC running the Python script
-const char* knnServerUrl = "http://10.77.54.12:5000/predict";
+const char* ServerUrl = "http://10.77.54.12:5000/predict";
 
 // --- LoRa Pin Definitions ---
 #define LORA_NSS    5
@@ -23,7 +23,7 @@ String loraDataFromTransmitter = "No data yet";
 //   String prediction = "Prediction Error"; // Default error message
 
 //   // Create the full URL with query parameters
-//   String requestUrl = String(knnServerUrl) + "?mq3=" + String(mq3, 2) + "&mq136=" + String(mq136, 2) + "&mq137=" + String(mq137, 2) + "&mhz19=" + String(mhz19, 2);
+//   String requestUrl = String(ServerUrl) + "?mq3=" + String(mq3, 2) + "&mq136=" + String(mq136, 2) + "&mq137=" + String(mq137, 2) + "&mhz19=" + String(mhz19, 2);
   
 //   Serial.print("Making request to: ");
 //   Serial.println(requestUrl);
@@ -52,7 +52,7 @@ String getModelPrediction(float mq3, float mq136, float mq137) {
   String prediction = "Prediction Error"; // Default error message
 
   // Create the full URL with query parameters
-  String requestUrl = String(knnServerUrl) + "?mq3=" + String(mq3, 2) + "&mq136=" + String(mq136, 2) + "&mq137=" + String(mq137, 2);
+  String requestUrl = String(ServerUrl) + "?mq3=" + String(mq3, 2) + "&mq136=" + String(mq136, 2) + "&mq137=" + String(mq137, 2);
   
   Serial.print("Making request to: ");
   Serial.println(requestUrl);

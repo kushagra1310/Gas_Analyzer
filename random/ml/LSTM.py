@@ -10,12 +10,25 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.utils import to_categorical
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
 
 # Load dataset
-df = pd.read_csv('Gas_Sensors_Measurements.csv')
+df = pd.read_excel('Dataset.xlsx')
+
+# Shuffle the dataset
+df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
 # Prepare features and labels
-X = df[['MQ135', 'MQ136', 'MQ137']].values
+feature_columns = ['MQ-3', 'MQ-136', 'MQ-137', 'Slope_MQ-3', 'Slope_MQ-136', 'Slope_MQ-137']
+
+try:
+    X = df[feature_columns].values
+    print(f"✅ Successfully loaded {len(feature_columns)} features.")
+except KeyError as e:
+    print(f"❌ Error: Column not found in Dataset.xlsx. {e}")
+    print("Please ensure your Excel file has columns for slopes.")
+    exit()
+
 y = df['Gas'].values
 
 # Encode labels
@@ -38,14 +51,14 @@ X_test_lstm = X_test_scaled.reshape(X_test_scaled.shape[0], 1, X_test_scaled.sha
 
 # Build LSTM model
 model = Sequential([
-    LSTM(128, input_shape=(1, 7), return_sequences=True),
+    LSTM(128, input_shape=(1, len(feature_columns)), return_sequences=True),
     Dropout(0.3),
     LSTM(64, return_sequences=False),
     Dropout(0.3),
     Dense(64, activation='relu'),
     Dropout(0.2),
     Dense(32, activation='relu'),
-    Dense(4, activation='softmax')  # 4 classes
+    Dense(num_classes, activation='softmax')
 ])
 
 # Compile model
@@ -112,6 +125,14 @@ plt.tight_layout()
 plt.savefig('lstm_training_history.png', dpi=300, bbox_inches='tight')
 plt.close()
 
+# Save the trained model, scaler and label encoder
+joblib.dump(model, 'lstm.pkl')
+joblib.dump(scaler, 'scaler_lstm.pkl')
+joblib.dump(label_encoder, 'label_encoder_lstm.pkl')
+
+print(f'\n✅ Model saved as lstm_model.pkl')
+print(f'✅ Scaler saved as scaler_lstm.pkl')
+print(f'✅ Label Encoder saved as label_encoder_lstm.pkl')
 print('\nLSTM model training completed!')
 print(f'Final Test Accuracy: {test_accuracy*100:.2f}%')
 

@@ -9,11 +9,22 @@ import seaborn as sns
 import joblib
 
 # Load dataset
-df = pd.read_csv('Gas_Sensors_Measurements.csv')
+df = pd.read_excel('Dataset.xlsx')
+
+# Shuffle the dataset
+df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
 # Prepare features and labels
-feature_names = ['MQ135', 'MQ136', 'MQ137']
-X = df[feature_names].values
+feature_columns = ['MQ-3', 'MQ-136', 'MQ-137', 'Slope_MQ-3', 'Slope_MQ-136', 'Slope_MQ-137']
+
+try:
+    X = df[feature_columns].values
+    print(f"✅ Successfully loaded {len(feature_columns)} features.")
+except KeyError as e:
+    print(f"❌ Error: Column not found in Dataset.xlsx. {e}")
+    print("Please ensure your Excel file has columns for slopes.")
+    exit()
+
 y = df['Gas'].values
 
 # Encode labels
@@ -94,12 +105,18 @@ indices = np.argsort(importances)[::-1]
 plt.figure(figsize=(10, 6))
 plt.title('Feature Importances')
 plt.bar(range(X.shape[1]), importances[indices], align='center')
-plt.xticks(range(X.shape[1]), [feature_names[i] for i in indices], rotation=45)
+plt.xticks(range(X.shape[1]), [feature_columns[i] for i in indices], rotation=45)
 plt.xlabel('Features')
 plt.ylabel('Importance Score')
 plt.tight_layout()
 plt.savefig('dt_feature_importances.png', dpi=300, bbox_inches='tight')
 plt.close()
 
+# Save the trained model and label encoder
+joblib.dump(best_dt, 'dt.pkl')
+joblib.dump(label_encoder, 'label_encoder_dt.pkl')
+
+print(f'\n✅ Model saved as dt.pkl')
+print(f'✅ Label Encoder saved as label_encoder_dt.pkl')
 print(f'\nDecision Tree model training completed!')
 print(f'Final Test Accuracy: {accuracy*100:.2f}%')

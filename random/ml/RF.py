@@ -6,12 +6,25 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
 
 # Load dataset
-df = pd.read_csv('Gas_Sensors_Measurements.csv')
+df = pd.read_excel('Dataset.xlsx')
+
+# Shuffle the dataset
+df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
 # Prepare features and labels
-X = df[['MQ135', 'MQ136', 'MQ137']].values
+feature_columns = ['MQ-3', 'MQ-136', 'MQ-137', 'Slope_MQ-3', 'Slope_MQ-136', 'Slope_MQ-137']
+
+try:
+    X = df[feature_columns].values
+    print(f"✅ Successfully loaded {len(feature_columns)} features.")
+except KeyError as e:
+    print(f"❌ Error: Column not found in Dataset.xlsx. {e}")
+    print("Please ensure your Excel file has columns for slopes.")
+    exit()
+
 y = df['Gas'].values
 
 # Encode labels
@@ -70,13 +83,12 @@ plt.savefig('rf_confusion_matrix.png', dpi=300, bbox_inches='tight')
 plt.close()
 
 # Feature importance
-feature_names = ['MQ2', 'MQ3', 'MQ5', 'MQ6', 'MQ7', 'MQ8', 'MQ135']
 importances = best_rf.feature_importances_
 indices = np.argsort(importances)[::-1]
 
 plt.figure(figsize=(10, 6))
 plt.bar(range(len(importances)), importances[indices], color='steelblue', alpha=0.8)
-plt.xticks(range(len(importances)), [feature_names[i] for i in indices], rotation=45)
+plt.xticks(range(len(importances)), [feature_columns[i] for i in indices], rotation=45)
 plt.title('Random Forest Feature Importance')
 plt.xlabel('Sensor')
 plt.ylabel('Importance')
@@ -88,8 +100,16 @@ plt.close()
 # Print feature importance
 print('\nFeature Importance:')
 for i in indices:
-    print(f'{feature_names[i]}: {importances[i]:.4f}')
+    print(f'{feature_columns[i]}: {importances[i]:.4f}')
 
+# Save the trained model, scaler and label encoder
+joblib.dump(best_rf, 'rf.pkl')
+joblib.dump(scaler, 'scaler_rf.pkl')
+joblib.dump(label_encoder, 'label_encoder_rf.pkl')
+
+print(f'\n✅ Model saved as rf.pkl')
+print(f'✅ Scaler saved as scaler_rf.pkl')
+print(f'✅ Label Encoder saved as label_encoder_rf.pkl')
 print(f'\nRandom Forest model training completed!')
 print(f'Final Test Accuracy: {accuracy*100:.2f}%')
 

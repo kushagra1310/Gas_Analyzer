@@ -8,7 +8,7 @@ const char* password = "12345678";
 WiFiServer server(8080);
 
 // REPLACE with your PC's actual IP
-const char* knnServerUrl = "http://10.77.54.12:5000/predict";
+const char* ServerUrl = "http://10.77.54.12:5000/predict";
 
 // LoRa Pins
 #define LORA_NSS    5
@@ -23,7 +23,7 @@ String getModelPrediction(float mq3, float mq136, float mq137, float s3, float s
   String prediction = "Error";
 
   // Construct URL with slopes
-  String requestUrl = String(knnServerUrl) + 
+  String requestUrl = String(ServerUrl) + 
                       "?mq3=" + String(mq3, 3) + 
                       "&mq136=" + String(mq136, 3) + 
                       "&mq137=" + String(mq137, 3) +
@@ -113,6 +113,7 @@ void loop() {
       client.printf("MQ-136,%.2f\n", mq136);
       client.printf("MQ-137,%.2f\n", mq137);
       client.printf("Prediction,%s\n", prediction.c_str());
+      loraDataFromTransmitter = "";
     } else {
       client.println("Waiting for data...");
     }
