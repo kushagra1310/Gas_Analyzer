@@ -12,21 +12,17 @@
 \begin{document}
 
 % ==================================================================
-% TITLE & AUTHORS
+% TITLE
 % ==================================================================
 \title{Robust Electronic Nose System for Atmospheric Gas Classification using Normalized Kinetic Feature Extraction}
 
-\author{\IEEEauthorblockN{First Author Name}
-\IEEEauthorblockA{\textit{Department} \\
-\textit{University/Organization Name}\\
-City, Country \\
-email@address.com}
-\and
-\IEEEauthorblockN{Second Author Name}
-\IEEEauthorblockA{\textit{Department} \\
-\textit{University/Organization Name}\\
-City, Country \\
-email@address.com}
+% ==================================================================
+% AUTHORS
+% ==================================================================
+\author{\IEEEauthorblockN{Bysani Vedavyas, Shreyas Agarwal, Kushagra Agarwal, Devshree Vyas}
+\IEEEauthorblockA{\textit{International Institute of Information Technology Hyderabad   } \\
+Hyderabad, India \\
+}
 }
 
 \maketitle
@@ -93,7 +89,7 @@ Accurately calculating the instantaneous reaction rate constant ($k$) requires e
 To overcome these limitations, this system employs an Electronic Nose (E-Nose) array. By utilizing multiple sensors with different metal-oxide compositions (yielding different selectivity coefficients $\alpha$ and rate constants $k$), a multi-dimensional response space is created. The combined vector of relative rates from the array provides a robust, unique signature for each gas, compensating for non-ideal kinetics.
 
 % ==================================================================
-% III. DERIVATION (UPDATED WITH ERROR ANALYSIS)
+% III. DERIVATION
 % ==================================================================
 \section{Derivation of Kinetic Descriptors}
 
@@ -136,11 +132,7 @@ This confirms that the feature is independent of the historical baseline $R_0$.
 \subsection{Error Analysis}
 However, even with a perfect sensor following the ideal law $X(t) = X_0 e^{-mkt}$, discrete sampling introduces mathematical error. This error can be quantified as:
 \begin{equation}
-\frac{\Delta X}{X \Delta t} = \frac{X(t+\Delta t) - X(t)}{X(t) \Delta t} = \frac{e^{-mk(t+\Delta t)} - e^{-mkt}}{e^{-mkt} \Delta t}
-\end{equation}
-Simplifying the exponential terms:
-\begin{equation}
-\frac{\Delta X}{X \Delta t} = \frac{e^{-mk\Delta t} - 1}{\Delta t}
+\frac{\Delta X}{X \Delta t} = \frac{e^{-mk(t+\Delta t)} - e^{-mkt}}{e^{-mkt} \Delta t} = \frac{e^{-mk\Delta t} - 1}{\Delta t}
 \end{equation}
 Using the Taylor series expansion $e^x \approx 1 + x + \frac{x^2}{2}$ for $x = -mk\Delta t$, we get:
 \begin{equation}
@@ -249,6 +241,12 @@ The combined array achieves 88.84\%, significantly outperforming the individual 
 % ==================================================================
 \section{Conclusion}
 This paper presented a robust Electronic Nose system built on the ESP32 platform, utilizing a novel phase-space trajectory mapping to classify atmospheric gases. By leveraging the normalized logarithmic derivative, we demonstrated that gas identity can be extracted as a topological invariant, decoupling the classification from baseline sensor drift. Experimental results confirmed that fusing data from MQ-3 and MQ-136 sensors resolves iso-resistive ambiguities, achieving 88.84\% accuracy and maintaining 100\% reliability in distinguishing clean air from contaminants. While the current array exhibits some cross-sensitivity between Butane and Smoke, the modular design allows for future expansion with orthogonal sensors to further enhance selectivity. The proposed $O(1)$ algorithm proves that sophisticated chemometric analysis is feasible on low-cost edge devices, paving the way for affordable, distributed air quality monitoring networks.
+
+% ==================================================================
+% VIII. ACKNOWLEDGMENT
+% ==================================================================
+\section*{Acknowledgment}
+The authors would like to thank Professor Abhishek Srivastava for his guidance and supervision throughout this research. We also extend our gratitude to our mentors, Alan Nelson and Srikar Somanchi, for their valuable insights and support in the development of this system.
 
 % ==================================================================
 % REFERENCES
