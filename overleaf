@@ -5,6 +5,8 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -182,6 +184,42 @@ The proposed logarithmic derivative calculation requires only two floating-point
 \subsection{Experimental Setup and Data Collection}
 The proposed E-Nose system was evaluated using a dataset collected from a sensor array consisting of MQ-3 and MQ-136 sensors. The dataset includes samples across five states: Clean Air (No\_Gas), Butane, Smoke, and their respective recovery phases (After\_Butane, After\_Smoke). Feature extraction was performed to compute the resistance ratio ($R_s/R_0$) and the normalized logarithmic derivative ($\dot{R}/R$) for each sensor, resulting in a 4-dimensional feature space. To validate the classification model, the dataset was partitioned into a training set (80\%) and a testing set (20\%). A K-Nearest Neighbors (KNN) classifier with $k=5$ was employed.
 
+% ==================================================================
+% BLOCK DIAGRAM: SYSTEM PIPELINE (COMPACT SIZE)
+% ==================================================================
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=1.4cm, scale=0.8, transform shape]
+
+% Define styles for the blocks
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black, fill=gray!10]
+\tikzstyle{process} = [rectangle, minimum width=2.5cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+% Place nodes
+\node (in1) [startstop] {Raw $R_s(t)$};
+\node (pro1) [process, below of=in1] {Normalize $X = R_s/R_0$};
+\node (pro2) [process, below of=pro1] {Log Derivative $\frac{\Delta X}{X}$};
+\node (pro3) [process, below of=pro2] {Phase Space $[X, \frac{\Delta X}{X}]$};
+\node (pro4) [process, below of=pro3] {KNN Classifier ($k=5$)};
+\node (out1) [startstop, below of=pro4, fill=gray!30] {Gas Class};
+
+% Draw arrows
+\draw [arrow] (in1) -- (pro1);
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (pro3);
+\draw [arrow] (pro3) -- (pro4);
+\draw [arrow] (pro4) -- (out1);
+
+% Add labels/notes (Optional)
+\node[text width=3cm, anchor=west, right of=pro2, xshift=2.5cm] (note1) {\small Drift Independent Feature};
+\draw [dashed, ->] (note1) -- (pro2);
+
+\end{tikzpicture}
+\caption{System Architecture Pipeline. The raw sensor resistance is transformed into a drift-independent kinetic feature before classification.}
+\label{fig:pipeline}
+\end{figure}
+
 \subsection{Phase Space Trajectory Analysis}
 The phase space representation effectively captures the dynamic behavior of the sensors. Fig. \ref{fig:mq3_phase} and Fig. \ref{fig:mq136_phase} illustrate the trajectories of the MQ-3 and MQ-136 sensors in the 2D plane defined by the Thermodynamic State ($X$) and the Kinetic State ($\dot{X}/X$).
 
@@ -225,13 +263,7 @@ However, it is crucial to note that confusion with `No\_Gas' was negligible. Thi
 \subsection{Sensor Fusion Validation}
 A comparative analysis highlights the necessity of the sensor array. Individual sensors suffer from specific blind spots, but fusing their data creates a more robust classifier.
 \begin{equation}
-A_{MQ3} = \frac{332}{466} \approx 71.24\%
-\end{equation}
-\begin{equation}
-A_{MQ136} = \frac{371}{466} \approx 79.61\%
-\end{equation}
-\begin{equation}
-A_{Combined} = \frac{414}{466} \approx 88.84\%
+A_{MQ3} \approx 71.24\%, A_{MQ136} \approx 79.61\%, A_{Combined} \approx 88.84\%
 \end{equation}
 
 The combined array achieves 88.84\%, significantly outperforming the individual MQ-136 and MQ-3 configurations. This 9.2\% improvement over the best single sensor validates that the E-Nose approach provides significantly higher accuracy than individual sensors.
