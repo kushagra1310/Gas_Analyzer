@@ -20,7 +20,7 @@
 % AUTHORS
 % ==================================================================
 \author{\IEEEauthorblockN{Bysani Vedavyas, Shreyas Agarwal, Kushagra Agrawal, Devshree Vyas}
-\IEEEauthorblockA{\textit{International Institute of Information Technology Hyderabad   } \\
+\IEEEauthorblockA{\textit{International Institute of Information Technology Hyderabad} \\
 Hyderabad, India \\
 }
 }
@@ -44,9 +44,9 @@ Electronic Nose (E-Nose), Metal Oxide Semiconductors (MOX), Phase Space Trajecto
 % I. INTRODUCTION
 % ==================================================================
 \section{Introduction}
-Accurately detecting gases in the atmosphere is a significant challenge primarily because highly precise sensors are often expensive and bulky. Metal-Oxide Semiconductor (MOX) sensors utilize chemo-resistive properties to detect volatile compounds, offering a cost-effective alternative. However, MOX sensors possess inherent limitations, specifically cross-sensitivity and sensor drift \cite{yamazoe2009new}. Cross-sensitivity refers to the phenomenon where a sensor intended to detect a specific gas (e.g., Gas B) also exhibits reactivity to interfering gases (e.g., Gas C and D), complicating single-gas detection. Furthermore, these sensors are prone to temporal drift. The sensing mechanism relies on surface redox reactions dependent on the active metal surface area. As the sensor undergoes thermal aging, the microstructure degrades, altering the baseline resistance $R_0$ and leading to calibration errors over time \cite{korotcenkov2012instability}.
+Accurately detecting gases in the atmosphere is a significant challenge primarily because highly precise sensors are often expensive and bulky. Metal-Oxide Semiconductor (MOX) sensors utilize chemo-resistive properties to detect volatile compounds, offering a cost-effective alternative \cite{pearce2003handbook}. However, MOX sensors possess inherent limitations, specifically cross-sensitivity and sensor drift \cite{yamazoe2009new}. Cross-sensitivity refers to the phenomenon where a sensor intended to detect a specific gas (e.g., Gas B) also exhibits reactivity to interfering gases (e.g., Gas C and D), complicating single-gas detection. Furthermore, these sensors are prone to temporal drift. The sensing mechanism relies on surface redox reactions dependent on the active metal surface area. As the sensor undergoes thermal aging, the microstructure degrades, altering the baseline resistance $R_0$ (resistance in clean air) and leading to calibration errors over time \cite{korotcenkov2012instability}.
 
-Previous research utilizing the electronic nose often trains models using either raw resistance values or the simple $R_s/R_0$ ratio \cite{yan2015enose}. However, models based on raw resistance values suffer from long-term inaccuracy due to sensor drift, which causes the baseline resistance to change. While using the $R_s/R_0$ ratio mitigates some variance, it is not entirely reliable due to ``iso-resistive ambiguity,'' where two distinct gases may momentarily produce identical $R_s/R_0$ values despite having different reaction kinetics. For instance, a sensor recovering from butane exposure may transiently exhibit an $R_s/R_0$ value identical to that of active smoke.
+Previous research utilizing the electronic nose often trains models using either raw sensor resistance ($R_s$) or the simple resistance ratio $R_s/R_0$ \cite{yan2015enose}. However, models based on raw resistance values suffer from long-term inaccuracy due to sensor drift, which causes the baseline resistance to change. While using the $R_s/R_0$ ratio mitigates some variance, it is not entirely reliable due to ``iso-resistive ambiguity,'' where two distinct gases may momentarily produce identical $R_s/R_0$ values despite having different reaction kinetics. For instance, a sensor recovering from butane exposure may transiently exhibit an $R_s/R_0$ value identical to that of active smoke.
 
 To address these challenges, this paper introduces a method that augments the feature vector to include not only the static ratio but also the normalized relative change of resistance. Our key contributions are:
 \begin{itemize}
@@ -80,7 +80,7 @@ Since the sensor's change in conductivity is a direct consequence of this reacti
 However, relying on a single sensor to extract these kinetic parameters is impractical for several reasons:
 
 \subsubsection{Non-Ideal Power Law Behavior}
-In real-world MOX sensors, the relationship between resistance and concentration follows an empirical Power Law ($R_s = A \cdot C^{-\alpha}$) rather than a strict linear relationship. Diffusion limitations within the porous sensor microstructure cause deviations from ideal kinetics, introducing non-linearities that a single measurement cannot fully resolve.
+In real-world MOX sensors, the relationship between the sensor resistance ($R_s$) and gas concentration ($C$) follows an empirical Power Law ($R_s = A \cdot C^{-\alpha}$) rather than a strict linear relationship. Diffusion limitations within the porous sensor microstructure cause deviations from ideal kinetics, introducing non-linearities that a single measurement cannot fully resolve.
 
 \subsubsection{Sampling \& Sensor Constraints}
 Accurately calculating the instantaneous reaction rate constant ($k$) requires extremely high-frequency sampling to capture initial kinetics before diffusion equilibrium. In embedded systems, hardware limitations (ADC quantization noise) and physical sensor response lag prevent precise continuous-time differentiation.
@@ -127,7 +127,7 @@ The baseline $R_0$ cancels out, yielding:
 \begin{equation}
 \frac{\Delta X}{X} = \frac{R_s(t+\Delta t) - R_s(t)}{R_s(t)}
 \end{equation}
-This confirms that the feature is independent of the historical baseline $R_0$.
+This confirms that the feature is independent of the absolute baseline $R_0$.
 
 \subsection{Error Analysis}
 However, even with a perfect sensor following the ideal law $X(t) = X_0 e^{-mkt}$, discrete sampling introduces mathematical error. This error can be quantified as:
