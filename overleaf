@@ -116,7 +116,7 @@ Substituting $\frac{1}{C}\frac{dC}{dt} = -k$ from the kinetic equation:
 \frac{1}{X} \frac{dX}{dt} = -mk
 \label{eq:log_derivative}
 \end{equation}
-Equation (\ref{eq:log_derivative}) implies that theoretically, we can identify the gas type (via constants $m$ and $k$) without needing to calibrate the sensor for baseline drift.
+Equation (\ref{eq:log_derivative}) implies that theoretically, we can identify the gas type (via constants $m$ and $k$) with the help of log derivative.
 
 \subsection{Discrete Implementation and Drift Independence}
 In a real-world digital system, we deal with finite sampling intervals. While $X$ depends on $R_0$ (which drifts over time), the relative change feature depends only on the instantaneous resistance $R_s$. We approximate the logarithmic derivative as:
