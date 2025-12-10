@@ -61,7 +61,7 @@ To address these challenges, this paper introduces a method that augments the fe
 \section{Theoretical Framework}
 
 \subsection{Pseudo-First-Order Kinetics and Deviations}
-Theoretically, the interaction between the target gas and the chemisorbed oxygen species on the sensor surface can be modeled as a pseudo-first-order kinetic reaction. In an ideal scenario, the rate of reaction ($r$) is directly proportional to the concentration of the reactant:
+Theoretically, the interaction between the target gas and the chemisorbed oxygen species on the sensor surface can be modeled as a pseudo-first-order kinetic reaction \cite{hjiri2022adsorption}. In an ideal scenario, the rate of reaction ($r$) is directly proportional to the concentration of the reactant:
 
 \begin{equation}
 -\frac{d[C]}{dt} = k[C]
@@ -271,6 +271,9 @@ J. W. Gardner, ``Detection of vapours and odours from a multisensor array using 
 
 \bibitem{pearce2003handbook}
 T. C. Pearce, S. S. Schiffman, H. T. Nagle, and J. W. Gardner, \textit{Handbook of Machine Olfaction: Electronic Nose Technology}. Weinheim: Wiley-VCH, 2003.
+
+\bibitem{hjiri2022adsorption}
+M. Hjiri \textit{et al.}, ``Adsorption Kinetics of NO2 Gas on Pt/Cr-TiO2/Pt-Based Sensors,'' \textit{Processes}, vol. 10, no. 1, 2022.
 
 \end{thebibliography}
 
